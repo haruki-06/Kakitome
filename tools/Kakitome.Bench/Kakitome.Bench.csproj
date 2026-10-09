@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- ASR benchmark harness (docs/08): synthesizes the corpus with local Windows voices and measures candidates
+       through the same reader/resampler/chunker/provider path the product uses. Not shipped. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>$(KakitomeWindowsTfm)</TargetFramework>
+    <TargetPlatformMinVersion>$(KakitomeWindowsMinVersion)</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion>$(KakitomeWindowsMinVersion)</SupportedOSPlatformVersion>
+    <Platforms>x64;ARM64</Platforms>
+    <IsPackable>false</IsPackable>
+    <NoWarn>$(NoWarn);CA1303;CA1515</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Kakitome.Infrastructure\Kakitome.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Speech" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Kakitome.Tests" />
+  </ItemGroup>
+</Project>

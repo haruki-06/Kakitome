@@ -1,0 +1,77 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+  <!--
+    Per-user install (no administrator rights): %LOCALAPPDATA%\Programs\Kakitome. The UpgradeCode (new since the rename, ADR-033) never changes, so a
+    newer MSI upgrades in place. Uninstall removes app state (settings, index, cache, logs) but never the Library,
+    backups or downloaded models — the in-app uninstall flow handles those by the user's choice (ADR-025/028).
+  -->
+  <Package Name="Kakitome"
+           Manufacturer="Kakitome"
+           Version="$(Version)"
+           UpgradeCode="fb894a4c-056f-453e-941d-56acb622c794"
+           Scope="perUser"
+           Language="1033"
+           Codepage="65001"
+           Compressed="yes">
+
+    <!-- Same-version upgrades too: pre-releases (2.0.0-beta.N) share the MSI version 2.0.0 and must replace each other. -->
+    <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A newer version of Kakitome is already installed." />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <Icon Id="KakitomeIcon" SourceFile="$(AppIcon)" />
+    <Property Id="ARPPRODUCTICON" Value="KakitomeIcon" />
+    <Property Id="ARPURLINFOABOUT" Value="https://github.com/haruki-06/Kakitome/releases" />
+    <Property Id="ARPNOMODIFY" Value="1" />
+
+    <StandardDirectory Id="LocalAppDataFolder">
+      <Directory Id="ProgramsFolder" Name="Programs">
+        <Directory Id="INSTALLFOLDER" Name="Kakitome" />
+      </Directory>
+      <Directory Id="AppStateFolder" Name="Kakitome" />
+    </StandardDirectory>
+    <StandardDirectory Id="ProgramMenuFolder" />
+
+    <!-- The application (self-contained .NET + Windows App SDK bootstrapper). -->
+    <ComponentGroup Id="AppFiles" Directory="INSTALLFOLDER">
+      <Files Include="$(PublishDir)\**" />
+    </ComponentGroup>
+
+    <Component Id="StartMenuShortcut" Directory="ProgramMenuFolder" Guid="857adbb3-925b-4c5d-a82b-d55e9a67b5fd">
+      <Shortcut Id="KakitomeShortcut" Name="Kakitome" Target="[INSTALLFOLDER]Kakitome.exe" WorkingDirectory="INSTALLFOLDER" Icon="KakitomeIcon" />
+      <RegistryValue Root="HKCU" Key="Software\Kakitome\Installer" Name="StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+      <RemoveFolder Id="RemoveInstallFolder" Directory="INSTALLFOLDER" On="uninstall" />
+    </Component>
+
+    <!-- On uninstall: app state only. Library (Documents), Backups and Models are never removed here. -->
+    <!-- Set before AppSearch: WixRemoveFoldersEx runs before CostInitialize, when directory properties are not resolved yet.
+         Not when the removal is part of an upgrade (UPGRADINGPRODUCTCODE): an update must keep settings, index and logs.
+         Unset properties make the folder/file removals below do nothing. -->
+    <SetProperty Id="KAKITOME_DATA" Value="[LocalAppDataFolder]Kakitome\Data" Before="AppSearch" Sequence="both" Condition="NOT UPGRADINGPRODUCTCODE" />
+    <SetProperty Id="KAKITOME_CACHE" Value="[LocalAppDataFolder]Kakitome\Cache" Before="AppSearch" Sequence="both" Condition="NOT UPGRADINGPRODUCTCODE" />
+    <SetProperty Id="KAKITOME_LOGS" Value="[LocalAppDataFolder]Kakitome\Logs" Before="AppSearch" Sequence="both" Condition="NOT UPGRADINGPRODUCTCODE" />
+    <SetProperty Id="KAKITOME_STATE" Value="[LocalAppDataFolder]Kakitome\" Before="AppSearch" Sequence="both" Condition="NOT UPGRADINGPRODUCTCODE" />
+    <Component Id="AppStateCleanup" Directory="AppStateFolder" Guid="3837a7de-9c3b-487f-ac7d-9837f25940bd">
+      <RegistryValue Root="HKCU" Key="Software\Kakitome\Installer" Name="AppStateCleanup" Type="integer" Value="1" KeyPath="yes" />
+      <util:RemoveFolderEx Id="RemoveData" Property="KAKITOME_DATA" On="uninstall" />
+      <util:RemoveFolderEx Id="RemoveCache" Property="KAKITOME_CACHE" On="uninstall" />
+      <util:RemoveFolderEx Id="RemoveLogs" Property="KAKITOME_LOGS" On="uninstall" />
+      <RemoveFile Id="RemoveSettings" Property="KAKITOME_STATE" Name="settings.json*" On="uninstall" />
+      <RemoveFile Id="RemoveResetMarker" Property="KAKITOME_STATE" Name="factory-reset.pending" On="uninstall" />
+    </Component>
+
+    <!-- Windows App Runtime 2.5 (Microsoft, redistributable): needed to start and for Windows notifications. Per-user,
+         no elevation; already-installed runtimes are left as they are. -->
+    <Binary Id="WinAppRuntimeInstaller" SourceFile="$(RuntimeInstaller)" />
+    <CustomAction Id="InstallWindowsAppRuntime" BinaryRef="WinAppRuntimeInstaller" ExeCommand="--quiet"
+                  Execute="deferred" Impersonate="yes" Return="check" />
+    <InstallExecuteSequence>
+      <Custom Action="InstallWindowsAppRuntime" After="InstallFiles" Condition="NOT REMOVE" />
+    </InstallExecuteSequence>
+
+    <Feature Id="Main">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentRef Id="StartMenuShortcut" />
+      <ComponentRef Id="AppStateCleanup" />
+    </Feature>
+  </Package>
+</Wix>

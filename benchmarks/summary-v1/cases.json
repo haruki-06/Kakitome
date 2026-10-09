@@ -1,0 +1,193 @@
+{
+  "version": 1,
+  "note": "Synthetic transcripts written for Kakitome's summary benchmark. Each reference item lists keyword groups; an output item matches when it contains at least one keyword of every group (case/width-insensitive). Owners/dues are checked the same way.",
+  "cases": [
+    {
+      "id": "weekly-meeting",
+      "language": "ja",
+      "title": "週次定例",
+      "segments": [
+        { "speaker": "田中", "text": "それでは週次定例を始めます。今日はリリース日程、テスト状況、顧客対応の三つです。" },
+        { "speaker": "田中", "text": "まずリリース日程ですが、当初の予定どおり進められそうでしょうか。" },
+        { "speaker": "佐藤", "text": "開発側は残りのバグ修正が二件だけなので、十一月五日のリリースで問題ないと思います。" },
+        { "speaker": "田中", "text": "では、リリースは十一月五日で確定とします。" },
+        { "speaker": "佐藤", "text": "テストについては、自動テストの環境がまだ一部手作業なので、私が金曜日までにテスト環境を整えます。" },
+        { "speaker": "鈴木", "text": "顧客対応ですが、A社から請求書の再発行の依頼が来ています。" },
+        { "speaker": "田中", "text": "それは鈴木さんの方で、明日中にA社へ連絡してもらえますか。" },
+        { "speaker": "鈴木", "text": "はい、明日中に連絡します。" },
+        { "speaker": "佐藤", "text": "あと一点、外部監査の日程はもう決まっていますか。" },
+        { "speaker": "田中", "text": "それはまだ先方から返事がなくて、決まっていません。" },
+        { "speaker": "田中", "text": "予算の見直しについては、今日は時間がないので次回に回します。" },
+        { "speaker": "田中", "text": "では今日はここまでにします。お疲れさまでした。" }
+      ],
+      "expected": {
+        "decisionItems": [
+          [ ["リリース"], ["11月5日", "十一月五日", "11/5"] ],
+          [ ["予算"], ["次回", "延期", "持ち越"] ]
+        ],
+        "actions": [
+          { "keywords": [ ["テスト環境", "テスト"] ], "owner": ["佐藤"], "due": ["金曜"] },
+          { "keywords": [ ["A社"] ], "owner": ["鈴木"], "due": ["明日"] }
+        ],
+        "questions": [ [ ["監査"] ] ],
+        "facts": [ [ ["リリース"] ], [ ["テスト"] ], [ ["A社", "請求書"] ] ]
+      }
+    },
+    {
+      "id": "lecture-ml",
+      "language": "ja",
+      "title": "機械学習 第4回",
+      "segments": [
+        { "speaker": null, "text": "それでは第四回の講義を始めます。今日は正則化について説明します。" },
+        { "speaker": null, "text": "前回は過学習の話をしました。訓練データにだけ合わせすぎると、新しいデータでの性能が落ちるという問題でした。" },
+        { "speaker": null, "text": "これを防ぐ方法の一つが正則化です。損失関数に、重みの大きさに対するペナルティを加えます。" },
+        { "speaker": null, "text": "重みの二乗和を加えるのがL2正則化、絶対値の和を加えるのがL1正則化です。" },
+        { "speaker": null, "text": "L1正則化は多くの重みをゼロにするので、特徴量の選択にも使えます。" },
+        { "speaker": null, "text": "ペナルティの強さはハイパーパラメータなので、検証データを使って決めます。" },
+        { "speaker": null, "text": "もう一つの方法として、ドロップアウトもありますが、これは次回のニューラルネットワークの回で扱います。" },
+        { "speaker": null, "text": "来週までに、配布した資料の演習二を解いて提出してください。締め切りは来週の月曜日です。" },
+        { "speaker": null, "text": "質問がある人は、授業の後に研究室に来てください。今日はここまでです。" }
+      ],
+      "expected": {
+        "decisionItems": [],
+        "actions": [
+          { "keywords": [ ["演習"] ], "owner": null, "due": ["月曜"] }
+        ],
+        "questions": [],
+        "facts": [ [ ["正則化"] ], [ ["過学習"] ], [ ["L1", "L2"] ], [ ["ドロップアウト"] ] ]
+      }
+    },
+    {
+      "id": "one-on-one",
+      "language": "ja",
+      "title": "1on1 面談",
+      "segments": [
+        { "speaker": "部長", "text": "今日は最近の業務と今後のことについて話しましょう。調子はどうですか。" },
+        { "speaker": "山田", "text": "プロジェクトは順調ですが、通勤に時間がかかっていて少し疲れています。" },
+        { "speaker": "部長", "text": "それなら、来月から週に一日リモート勤務にしましょう。人事には私から伝えておきます。" },
+        { "speaker": "山田", "text": "ありがとうございます。それから、データ分析の研修に参加したいと考えています。" },
+        { "speaker": "部長", "text": "いいと思います。申し込みは今月末までなので、山田さんの方で手続きをしてください。" },
+        { "speaker": "山田", "text": "わかりました。今月末までに申し込みます。" },
+        { "speaker": "山田", "text": "研修費用が会社負担になるかどうかは、まだわからないですよね。" },
+        { "speaker": "部長", "text": "そこは確認が必要ですね。次回の面談は二週間後にしましょう。" }
+      ],
+      "expected": {
+        "decisionItems": [
+          [ ["リモート"] ]
+        ],
+        "actions": [
+          { "keywords": [ ["人事"] ], "owner": ["部長"], "due": null },
+          { "keywords": [ ["研修"] ], "owner": ["山田"], "due": ["月末"] }
+        ],
+        "questions": [ [ ["費用", "会社負担"] ] ],
+        "facts": [ [ ["リモート"] ], [ ["研修"] ] ]
+      }
+    },
+    {
+      "id": "customer-call",
+      "language": "ja",
+      "title": "B社 定期打ち合わせ",
+      "segments": [
+        { "speaker": "高橋", "text": "本日はお時間いただきありがとうございます。現在のご利用状況からお伺いできますか。" },
+        { "speaker": "B社 中村", "text": "社内のユーザーが増えて、今のBasicプランでは容量が足りなくなってきました。" },
+        { "speaker": "高橋", "text": "それでしたら、Proプランへの変更をご提案します。容量は五倍になります。" },
+        { "speaker": "B社 中村", "text": "社内で確認しましたが、Proプランに変更する方向で進めたいと思います。" },
+        { "speaker": "高橋", "text": "ありがとうございます。では水曜日までにProプランのお見積書をお送りします。" },
+        { "speaker": "B社 中村", "text": "一点確認ですが、ProプランはSSO、シングルサインオンに対応していますか。" },
+        { "speaker": "高橋", "text": "申し訳ありません、今すぐにはお答えできないので、技術担当に確認します。" },
+        { "speaker": "B社 中村", "text": "それと、契約の切り替えは来月一日からでお願いします。" },
+        { "speaker": "高橋", "text": "承知しました。来月一日からの切り替えで手配いたします。" }
+      ],
+      "expected": {
+        "decisionItems": [
+          [ ["Pro"] ],
+          [ ["来月", "一日", "1日", "切り替え"] ]
+        ],
+        "actions": [
+          { "keywords": [ ["見積"] ], "owner": ["高橋"], "due": ["水曜"] },
+          { "keywords": [ ["SSO", "シングルサインオン", "技術"] ], "owner": ["高橋", "技術"], "due": null }
+        ],
+        "questions": [ [ ["SSO", "シングルサインオン"] ] ],
+        "facts": [ [ ["容量"] ], [ ["Pro"] ] ]
+      }
+    },
+    {
+      "id": "interview",
+      "language": "ja",
+      "title": "パン屋店主インタビュー",
+      "segments": [
+        { "speaker": "記者", "text": "本日はありがとうございます。まず、パン屋を始めたきっかけを教えてください。" },
+        { "speaker": "店主", "text": "もともと会社員だったのですが、趣味でパンを焼いていて、近所の人に配っていたのが始まりです。" },
+        { "speaker": "店主", "text": "十年前に思い切って会社を辞めて、駅前に小さな店を開きました。" },
+        { "speaker": "記者", "text": "人気の商品は何ですか。" },
+        { "speaker": "店主", "text": "地元の小麦を使った食パンです。朝の九時には売り切れてしまう日もあります。" },
+        { "speaker": "記者", "text": "これからの目標はありますか。" },
+        { "speaker": "店主", "text": "地域の子どもたちにパン作りを教える教室を開きたいと思っています。" }
+      ],
+      "expected": {
+        "decisionItems": [],
+        "actions": [],
+        "questions": [],
+        "facts": [ [ ["会社員", "趣味"] ], [ ["食パン", "小麦"] ], [ ["教室"] ] ]
+      }
+    },
+    {
+      "id": "english-standup",
+      "language": "en",
+      "title": "Team stand-up",
+      "segments": [
+        { "speaker": "Alice", "text": "Good morning. Let's go through updates quickly." },
+        { "speaker": "Bob", "text": "I finished the login page yesterday. Today I'll start on the password reset flow." },
+        { "speaker": "Carol", "text": "I'm still blocked on the payment API because we don't have the sandbox keys." },
+        { "speaker": "Alice", "text": "I'll ask the vendor for the sandbox keys today." },
+        { "speaker": "Alice", "text": "We agreed last week to move the demo to Thursday, so let's keep that." },
+        { "speaker": "Bob", "text": "Do we know if the client will join the demo in person?" },
+        { "speaker": "Alice", "text": "Not yet. Carol, please update the test plan by Wednesday." }
+      ],
+      "expected": {
+        "decisionItems": [
+          [ ["demo"], ["Thursday"] ]
+        ],
+        "actions": [
+          { "keywords": [ ["sandbox", "keys", "vendor"] ], "owner": ["Alice"], "due": ["today"] },
+          { "keywords": [ ["test plan"] ], "owner": ["Carol"], "due": ["Wednesday"] },
+          { "keywords": [ ["password", "reset"] ], "owner": ["Bob"], "due": null }
+        ],
+        "questions": [ [ ["client", "in person"] ] ],
+        "facts": [ [ ["login"] ], [ ["payment", "blocked"] ] ]
+      }
+    },
+    {
+      "id": "long-planning",
+      "language": "ja",
+      "title": "四半期計画会議",
+      "repeat": 6,
+      "segments": [
+        { "speaker": "議長", "text": "それでは四半期計画会議を始めます。今日は売上目標、採用、新製品、オフィス移転について話します。" },
+        { "speaker": "営業部長", "text": "前四半期の売上は前年比で八パーセント増えました。特に関西地域の伸びが大きかったです。" },
+        { "speaker": "営業部長", "text": "今四半期は、関西に営業担当を二名増やして、さらに伸ばしたいと考えています。" },
+        { "speaker": "議長", "text": "売上目標は前年比十パーセント増で設定することにします。" },
+        { "speaker": "人事", "text": "採用については、エンジニアの応募が少なく、まだ三名の欠員があります。" },
+        { "speaker": "人事", "text": "来月までに採用イベントを企画して、案を共有します。" },
+        { "speaker": "開発部長", "text": "新製品は予定より二週間遅れていますが、年内の発表は可能です。" },
+        { "speaker": "議長", "text": "では新製品の発表は十二月に行うことで決定します。" },
+        { "speaker": "総務", "text": "オフィス移転ですが、候補のビルが二つあり、まだ比較中です。" },
+        { "speaker": "総務", "text": "移転費用の見積もりがまだ揃っていないので、決定は次回にさせてください。" },
+        { "speaker": "開発部長", "text": "移転の時期が新製品の発表と重ならないかが心配です。" },
+        { "speaker": "議長", "text": "その点は次回までに総務と開発で調整してください。" }
+      ],
+      "expected": {
+        "decisionItems": [
+          [ ["売上目標", "目標"], ["10", "十"] ],
+          [ ["新製品"], ["12月", "十二月"] ]
+        ],
+        "actions": [
+          { "keywords": [ ["採用イベント", "採用"] ], "owner": ["人事"], "due": ["来月"] },
+          { "keywords": [ ["調整", "移転"] ], "owner": ["総務", "開発"], "due": ["次回"] }
+        ],
+        "questions": [ [ ["移転"] ] ],
+        "facts": [ [ ["売上"] ], [ ["採用"] ], [ ["新製品"] ], [ ["移転"] ] ]
+      }
+    }
+  ]
+}

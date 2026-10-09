@@ -1,0 +1,19 @@
+<Project Sdk="WixToolset.Sdk/5.0.2">
+  <!--
+    Per-user MSI for Kakitome (ADR-028). Built by tools/Build-Release.ps1:
+      dotnet build installer/Kakitome.Installer.wixproj -c Release -p:InstallerPlatform=x64
+        -p:KakitomeVersion=1.1.0 -p:PublishDir=<self-contained publish folder> -p:RuntimeInstaller=<WindowsAppRuntimeInstall-x64.exe>
+  -->
+  <PropertyGroup>
+    <OutputName>Kakitome</OutputName>
+    <OutputType>Package</OutputType>
+    <InstallerPlatform Condition="'$(InstallerPlatform)' == ''">x64</InstallerPlatform>
+    <DefineConstants>Version=$(KakitomeVersion);PublishDir=$(PublishDir);RuntimeInstaller=$(RuntimeInstaller);AppIcon=$(MSBuildThisFileDirectory)..\src\Kakitome.App\Assets\Kakitome.ico</DefineConstants>
+    <!-- Per-user app in the user profile: file key paths and a kept AppData folder (models live there) are intended. -->
+    <!-- ICE61: same-version major upgrades are intended (pre-releases share the MSI version, see Package.wxs). -->
+    <SuppressIces>ICE38;ICE60;ICE61;ICE64;ICE91</SuppressIces>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Util.wixext" />
+  </ItemGroup>
+</Project>

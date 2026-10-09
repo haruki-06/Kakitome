@@ -1,0 +1,50 @@
+{
+  "schema": "kakitome.asr-corpus",
+  "version": 1,
+  "description": "Synthetic ASR benchmark corpus v1. Original sentences written for Kakitome; audio is synthesized locally with the Windows ja-JP/en-US voices (tools/Kakitome.Bench corpus). Noise variants are mixed at fixed SNRs with a fixed seed. Synthetic speech is easier than real speech: use for relative ranking, not absolute accuracy.",
+  "noise": [
+    { "suffix": "clean", "snrDb": null },
+    { "suffix": "noise15", "snrDb": 15 },
+    { "suffix": "noise5", "snrDb": 5 }
+  ],
+  "items": [
+    { "id": "lecture-01", "category": "lecture", "language": "ja", "text": "それでは今日の講義を始めます。前回は線形回帰の考え方を説明しましたが、今回は勾配降下法について詳しく見ていきます。" },
+    { "id": "lecture-02", "category": "lecture", "language": "ja", "text": "学習率が大きすぎると損失は発散してしまいます。逆に小さすぎると、収束するまでに非常に長い時間がかかります。" },
+    { "id": "lecture-03", "category": "lecture", "language": "ja", "text": "ここで大事なのは、データを訓練用と検証用に分けて、過学習が起きていないかを確認することです。" },
+    { "id": "lecture-04", "category": "lecture", "language": "ja", "text": "日本の近代化は明治維新から始まったとよく言われますが、実際には江戸時代の後半から準備が進んでいました。" },
+    { "id": "meeting-01", "category": "meeting", "language": "ja", "text": "では次の議題に移ります。来月のリリースについて、開発チームから進捗を報告してください。" },
+    { "id": "meeting-02", "category": "meeting", "language": "ja", "text": "テストの自動化は八割ほど終わっていますが、残りの部分は来週の水曜日までに完了させる予定です。" },
+    { "id": "meeting-03", "category": "meeting", "language": "ja", "text": "結論として、予算の見直しは次回の会議で決定することにします。担当は佐藤さんでお願いします。" },
+    { "id": "interview-01", "category": "interview", "language": "ja", "text": "本日はお時間をいただきありがとうございます。まず、この仕事を始めたきっかけを教えていただけますか。" },
+    { "id": "interview-02", "category": "interview", "language": "ja", "text": "最初は趣味で始めたのですが、地域の人たちに喜んでもらえるのが嬉しくて、気がついたら十年が経っていました。" },
+    { "id": "casual-01", "category": "casual", "language": "ja", "text": "昨日の夜、駅前に新しくできたラーメン屋に行ってみたんだけど、思ったより並んでなくてすぐ入れたよ。" },
+    { "id": "casual-02", "category": "casual", "language": "ja", "text": "週末は天気が良さそうだから、久しぶりに公園で散歩でもしようかなと思ってる。" },
+    { "id": "numbers-01", "category": "numbers", "language": "ja", "text": "売上は前年比で十二パーセント増加し、三億四千万円になりました。" },
+    { "id": "numbers-02", "category": "numbers", "language": "ja", "text": "会議は二千二十六年十月十五日の午後二時半から、第三会議室で行います。" },
+    { "id": "numbers-03", "category": "numbers", "language": "ja", "text": "電話番号は〇三の一二三四の五六七八です。内線は四百二番です。" },
+    { "id": "proper-01", "category": "proper-nouns", "language": "ja", "text": "東京大学の田中教授と京都の山本研究所が共同で研究を進めています。" },
+    { "id": "proper-02", "category": "proper-nouns", "language": "ja", "text": "北海道の札幌から鹿児島まで、新幹線を乗り継いで移動しました。" },
+    { "id": "technical-01", "category": "technical", "language": "ja", "text": "このサービスはデータベースのインデックスを再構築することで、検索の応答時間を大幅に短縮しました。" },
+    { "id": "technical-02", "category": "technical", "language": "ja", "text": "非同期処理では、例外を適切に捕捉しないとアプリケーションが予期せず終了することがあります。" },
+    { "id": "technical-03", "category": "technical", "language": "ja", "text": "量子化したモデルはメモリ使用量が少なく、ノートパソコンでも推論を実行できます。" },
+    { "id": "mixed-01", "category": "mixed-ja-en", "language": "ja", "text": "まずGitHubでプルリクエストを作成して、レビューが通ったらmainブランチにマージしてください。" },
+    { "id": "mixed-02", "category": "mixed-ja-en", "language": "ja", "text": "このAPIはJSON形式でレスポンスを返すので、クライアント側でパースする必要があります。" },
+    { "id": "mixed-03", "category": "mixed-ja-en", "language": "ja", "text": "今回のアップデートでWindowsのダークモードとキーボードショートカットに対応しました。" },
+    { "id": "filler-01", "category": "filler", "language": "ja", "text": "えーと、その件については、あの、もう少し確認してからお返事してもいいですか。" },
+    { "id": "filler-02", "category": "filler", "language": "ja", "text": "まあ、なんというか、方向性としては悪くないと思うんですけど、うーん、もう少し具体的にしたいですね。" },
+    { "id": "english-01", "category": "english", "language": "en", "text": "Thank you all for joining today. Let's start with a quick review of last week's action items." },
+    { "id": "english-02", "category": "english", "language": "en", "text": "The new feature will be released in October, after we finish the performance testing on laptops." },
+    {
+      "id": "long-lecture",
+      "category": "long",
+      "language": "ja",
+      "text": "それでは今日の講義を始めます。前回は線形回帰の考え方を説明しましたが、今回は勾配降下法について詳しく見ていきます。勾配降下法とは、損失関数の値が小さくなる方向にパラメータを少しずつ更新していく方法です。学習率が大きすぎると損失は発散してしまいます。逆に小さすぎると、収束するまでに非常に長い時間がかかります。そのため、実際には学習率を段階的に小さくしていく工夫がよく使われます。ここで大事なのは、データを訓練用と検証用に分けて、過学習が起きていないかを確認することです。訓練データに対する誤差だけが下がって、検証データに対する誤差が上がり始めたら、それは過学習の兆候です。次回は確率的勾配降下法とミニバッチについて説明します。今日の内容を復習して、演習問題の三番と四番を解いておいてください。質問がある人は授業の後に研究室まで来てください。"
+    },
+    {
+      "id": "long-meeting",
+      "category": "long",
+      "language": "ja",
+      "text": "では定例会議を始めます。まず先週の振り返りからお願いします。開発チームでは、録音機能の安定性を改善しました。特にデバイスが切断されたときに、録音を継続できるようになっています。テストの自動化は八割ほど終わっていますが、残りの部分は来週の水曜日までに完了させる予定です。次に、品質保証チームから報告をお願いします。今週は大きな不具合は見つかっていませんが、長時間の録音で一部のノートパソコンのバッテリー消費が多いという報告がありました。原因を調査して、次回の会議までに対策案を出します。最後に、来月のリリースについてです。予定どおり進めることで問題ないでしょうか。特に異論がなければ、この方針で進めます。結論として、予算の見直しは次回の会議で決定することにします。担当は佐藤さんでお願いします。本日はありがとうございました。"
+    }
+  ]
+}

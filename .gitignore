@@ -1,0 +1,67 @@
+# Build output
+bin/
+obj/
+[Bb]uild/
+artifacts/
+AppPackages/
+BundleArtifacts/
+*.msix
+*.msixbundle
+*.appx
+*.appxbundle
+*.appxupload
+
+# IDE / user state
+.vs/
+.vscode/
+*.user
+*.suo
+*.userprefs
+*.rsuser
+.idea/
+
+# Tests
+TestResults/
+*.trx
+coverage*/
+
+# Signing material (never commit)
+*.pfx
+*.p12
+*.snk
+*.cer.local
+
+# Secrets / env
+.env
+.env.*
+*.secret
+secrets.json
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Large / local-only data (anchored to the repo root so source folders such as
+# src/**/Library or src/**/Models are never ignored)
+/models/
+/Models/
+/benchmarks/corpus/
+/benchmarks/audio/
+/benchmarks/runs/
+/Library/
+/test-recordings/
+*.wav
+*.flac
+*.mp3
+*.m4a
+*.mp4
+*.onnx
+*.gguf
+*.bin
+
+# Logs
+*.log
+logs/
+
+# Claude Code runtime state (Stop hook)
+.claude/state/
+/benchmarks/models/

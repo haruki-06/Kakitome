@@ -1,0 +1,352 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Page
+  x:Class="Kakitome.App.Views.SettingsPage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:vm="using:Kakitome.Presentation.ViewModels"
+  xmlns:views="using:Kakitome.App.Views">
+
+  <!--
+    Settings are grouped into tabs (docs/02 groups: Recording, Transcription, AI/Summary, Models, Storage, Notifications,
+    Maintenance, About). Each setting is a card; settings most people never change sit in a collapsed "Advanced" area.
+  -->
+  <Page.Resources>
+    <Style x:Key="SectionHeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyStrongTextBlockStyle}">
+      <Setter Property="Margin" Value="0,20,0,4" />
+    </Style>
+    <Style TargetType="Expander">
+      <Setter Property="HorizontalAlignment" Value="Stretch" />
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    </Style>
+    <DataTemplate x:Key="ModelCardTemplate" x:DataType="vm:ModelItemViewModel">
+      <Border Style="{StaticResource SettingsCardBorderStyle}" Margin="0,0,0,4">
+        <Grid ColumnSpacing="12" RowSpacing="6">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+          <StackPanel Spacing="2">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <TextBlock Text="{x:Bind Name}" />
+              <TextBlock x:Uid="Model_Recommended" Foreground="{ThemeResource AccentTextFillColorPrimaryBrush}"
+                         Style="{StaticResource CaptionTextBlockStyle}" VerticalAlignment="Center"
+                         Visibility="{x:Bind IsRecommended}" />
+            </StackPanel>
+            <TextBlock Text="{x:Bind Note}" Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="Wrap" />
+            <TextBlock Text="{x:Bind Details}" Style="{StaticResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextWrapping="Wrap" />
+            <TextBlock Text="{x:Bind StateText, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="Wrap" />
+          </StackPanel>
+          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+            <Button x:Uid="Model_Install" Style="{StaticResource AccentButtonStyle}" Click="OnInstall" Tag="{x:Bind}"
+                    Visibility="{x:Bind views:Bind.VisibleIfAndNot(CanInstall, NeedsRepair), Mode=OneWay}" />
+            <Button x:Uid="Model_Repair" Style="{StaticResource AccentButtonStyle}" Click="OnInstall" Tag="{x:Bind}"
+                    Visibility="{x:Bind views:Bind.VisibleIfBoth(CanInstall, NeedsRepair), Mode=OneWay}" />
+            <Button x:Uid="Model_Verify" Click="OnVerify" Tag="{x:Bind}" IsEnabled="{x:Bind CanVerify, Mode=OneWay}"
+                    Visibility="{x:Bind IsInstalled, Mode=OneWay}" />
+            <Button x:Uid="Model_Remove" Click="OnRemove" Tag="{x:Bind}" Visibility="{x:Bind IsInstalled, Mode=OneWay}" />
+          </StackPanel>
+          <ProgressBar Grid.Row="1" Grid.ColumnSpan="2" Maximum="100" Value="{x:Bind Progress, Mode=OneWay}"
+                       Visibility="{x:Bind IsInstalling, Mode=OneWay}" AutomationProperties.Name="{x:Bind Name}" />
+        </Grid>
+      </Border>
+    </DataTemplate>
+  </Page.Resources>
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <!-- Left-aligned column that fills the width up to a readable maximum (a star column with MaxWidth). -->
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" MaxWidth="884" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+    <StackPanel Padding="32,24,32,0" Spacing="8">
+      <TextBlock x:Uid="Settings_Header" Style="{StaticResource TitleTextBlockStyle}" AutomationProperties.HeadingLevel="Level1" />
+      <SelectorBar x:Name="Tabs" SelectionChanged="OnTabChanged" AutomationProperties.AutomationId="SettingsTabs">
+        <SelectorBarItem x:Name="GeneralTab" x:Uid="SettingsTab_General" Tag="general" IsSelected="True" AutomationProperties.AutomationId="SettingsTabGeneral" />
+        <SelectorBarItem x:Name="RecordingTab" x:Uid="SettingsTab_Recording" Tag="recording" AutomationProperties.AutomationId="SettingsTabRecording" />
+        <SelectorBarItem x:Name="TranscriptionTab" x:Uid="SettingsTab_Transcription" Tag="transcription" AutomationProperties.AutomationId="SettingsTabTranscription" />
+        <SelectorBarItem x:Name="ModelsTab" x:Uid="SettingsTab_Models" Tag="models" AutomationProperties.AutomationId="SettingsTabModels" />
+        <SelectorBarItem x:Name="DataTab" x:Uid="SettingsTab_Data" Tag="data" AutomationProperties.AutomationId="SettingsTabData" />
+      </SelectorBar>
+    </StackPanel>
+    </Grid>
+
+    <ScrollViewer x:Name="Scroller" Grid.Row="1" HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" MaxWidth="884" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+      <Grid Padding="32,8,32,32">
+
+        <!-- Recording -->
+        <StackPanel x:Name="RecordingPanel" Spacing="4" Visibility="Collapsed">
+          <TextBlock x:Uid="Settings_Recording" Style="{StaticResource SectionHeaderStyle}" AutomationProperties.HeadingLevel="Level2" />
+          <views:SettingCard x:Uid="Settings_Hotkey">
+            <TextBox Width="240" AutomationProperties.AutomationId="HotkeyBox" Text="{x:Bind ViewModel.ToggleHotkey, Mode=TwoWay}" />
+          </views:SettingCard>
+          <TextBlock Text="{x:Bind ViewModel.HotkeyError, Mode=OneWay}" Foreground="{ThemeResource SystemFillColorCriticalBrush}" TextWrapping="Wrap"
+                     Visibility="{x:Bind views:Bind.HasText(ViewModel.HotkeyError), Mode=OneWay}" Margin="16,0" />
+          <views:SettingCard x:Uid="Settings_SystemAudio">
+            <ToggleSwitch IsOn="{x:Bind ViewModel.IncludeSystemAudio, Mode=TwoWay}" />
+          </views:SettingCard>
+          <views:SettingCard x:Uid="Settings_LiveTranscript">
+            <ToggleSwitch IsOn="{x:Bind ViewModel.LiveTranscript, Mode=TwoWay}" />
+          </views:SettingCard>
+          <Expander x:Uid="Settings_Advanced" Margin="0,8,0,0" AutomationProperties.AutomationId="RecordingAdvanced">
+            <StackPanel Spacing="4">
+              <views:SettingCard x:Uid="Settings_PreventSleep">
+                <ToggleSwitch IsOn="{x:Bind ViewModel.PreventSleep, Mode=TwoWay}" />
+              </views:SettingCard>
+              <views:SettingCard x:Uid="Settings_KeepRecording">
+                <ToggleSwitch IsOn="{x:Bind ViewModel.KeepRecordingWhenWindowClosed, Mode=TwoWay}" />
+              </views:SettingCard>
+              <views:SettingCard x:Uid="Settings_Retention">
+                <ComboBox ItemsSource="{x:Bind ViewModel.Retentions}" SelectedItem="{x:Bind ViewModel.Retention, Mode=TwoWay}"
+                          MinWidth="240" AutomationProperties.AutomationId="RetentionBox" />
+              </views:SettingCard>
+            </StackPanel>
+          </Expander>
+        </StackPanel>
+
+        <!-- Transcription and summary -->
+        <StackPanel x:Name="TranscriptionPanel" Spacing="4" Visibility="Collapsed">
+          <TextBlock x:Uid="Settings_Transcription" Style="{StaticResource SectionHeaderStyle}" AutomationProperties.HeadingLevel="Level2" />
+          <views:SettingCard x:Uid="Settings_Language">
+            <ComboBox ItemsSource="{x:Bind ViewModel.Languages}" SelectedItem="{x:Bind ViewModel.TranscriptionLanguage, Mode=TwoWay}" MinWidth="240" />
+          </views:SettingCard>
+          <views:SettingCard x:Uid="Settings_AutoProcess">
+            <ToggleSwitch IsOn="{x:Bind ViewModel.AutoProcess, Mode=TwoWay}" />
+          </views:SettingCard>
+
+          <TextBlock x:Uid="Settings_Glossary" Style="{StaticResource SectionHeaderStyle}" AutomationProperties.HeadingLevel="Level2" />
+          <Border Style="{StaticResource SettingsCardBorderStyle}">
+            <StackPanel Spacing="10">
+              <TextBlock x:Uid="Settings_GlossaryHelp" Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="Wrap"
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+              <StackPanel Orientation="Horizontal" Spacing="12">
+                <ComboBox x:Uid="Glossary_Scope" ItemsSource="{x:Bind Glossary.Scopes}" SelectedItem="{x:Bind Glossary.Scope, Mode=TwoWay}"
+                          MinWidth="280" AutomationProperties.AutomationId="GlossaryScope" />
+                <TextBlock Text="{x:Bind Glossary.Status, Mode=OneWay}" VerticalAlignment="Bottom" Margin="0,0,0,6" AutomationProperties.AutomationId="GlossaryStatus" />
+              </StackPanel>
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button x:Uid="Glossary_Import" Style="{StaticResource AccentButtonStyle}" Command="{x:Bind Glossary.ImportCommand}" AutomationProperties.AutomationId="GlossaryImport" />
+                <Button x:Uid="Glossary_Edit" Command="{x:Bind Glossary.EditCommand}" AutomationProperties.AutomationId="GlossaryEdit" />
+                <Button x:Uid="Glossary_Remove" Command="{x:Bind Glossary.RemoveCommand}" AutomationProperties.AutomationId="GlossaryRemove" />
+              </StackPanel>
+              <InfoBar IsOpen="{x:Bind Glossary.Message, Mode=OneWay, Converter={StaticResource NotNullToBool}}" Message="{x:Bind Glossary.Message, Mode=OneWay}"
+                       Severity="{x:Bind SeverityOf(Glossary.MessageIsError), Mode=OneWay}" IsClosable="False" AutomationProperties.AutomationId="GlossaryMessage" />
+              <CheckBox x:Uid="Settings_GlossaryTips" IsChecked="{x:Bind Glossary.ShowTips, Mode=TwoWay}" AutomationProperties.AutomationId="GlossaryTips" />
+            </StackPanel>
+          </Border>
+          <Expander x:Uid="Glossary_HowTo" AutomationProperties.AutomationId="GlossaryHowTo">
+            <StackPanel Spacing="8">
+              <TextBlock Text="{x:Bind Glossary.FormatHelp}" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
+              <TextBlock x:Uid="Glossary_AiHeader" Style="{StaticResource BodyStrongTextBlockStyle}" />
+              <TextBox Text="{x:Bind Glossary.AiRequest}" IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True" FontFamily="Consolas, Yu Gothic UI"
+                       AutomationProperties.AutomationId="GlossaryAiRequest" x:Uid="Glossary_AiRequestBox" />
+              <Button x:Uid="Glossary_Copy" Command="{x:Bind Glossary.CopyAiRequestCommand}" AutomationProperties.AutomationId="GlossaryCopy" />
+            </StackPanel>
+          </Expander>
+
+          <Expander x:Uid="Settings_Advanced" Margin="0,16,0,0" AutomationProperties.AutomationId="TranscriptionAdvanced">
+            <StackPanel Spacing="4">
+              <views:SettingCard x:Uid="Settings_AsrModel">
+                <ComboBox ItemsSource="{x:Bind ViewModel.AsrModels}" SelectedItem="{x:Bind ViewModel.AsrModel, Mode=TwoWay}" MinWidth="240" MaxWidth="320" />
+              </views:SettingCard>
+              <views:SettingCard x:Uid="Settings_SummaryEngine">
+                <ComboBox ItemsSource="{x:Bind ViewModel.SummaryEngines}" SelectedItem="{x:Bind ViewModel.SummaryEngine, Mode=TwoWay}" MinWidth="240" MaxWidth="320" />
+              </views:SettingCard>
+              <views:SettingCard x:Uid="Settings_Mode">
+                <ComboBox ItemsSource="{x:Bind ViewModel.ProcessingModes}" SelectedItem="{x:Bind ViewModel.ProcessingMode, Mode=TwoWay}" MinWidth="240" MaxWidth="320" />
+              </views:SettingCard>
+            </StackPanel>
+          </Expander>
+        </StackPanel>
+
+        <!-- Models by purpose: speech recognition, summary AI, tools (yt-dlp). -->
+        <StackPanel x:Name="ModelsPanel" Spacing="4" Visibility="Collapsed">
+          <TextBlock x:Uid="Settings_Models" Style="{StaticResource SectionHeaderStyle}" AutomationProperties.HeadingLevel="Level2" />
+          <TextBlock x:Uid="Settings_ModelsHint" TextWrapping="Wrap" Style="{StaticResource CaptionTextBlockStyle}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}" Margin="0,0,0,4" />
+          <views:SettingCard x:Uid="Settings_AutoDownload">
+            <ToggleSwitch IsOn="{x:Bind ViewModel.AutoDownloadModels, Mode=TwoWay}" AutomationProperties.AutomationId="AutoDownloadModels" />
+          </views:SettingCard>
+
+          <TextBlock x:Uid="Settings_AsrModels" Style="{StaticResource SectionHeaderStyle}" AutomationProperties.HeadingLevel="Level2" />
+          <TextBlock x:Uid="Settings_AsrModelsHint" TextWrapping="Wrap" Style="{StaticResource CaptionTextBlockStyle}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}" Margin="0,0,0,4" />
+          <ItemsControl ItemsSource="{x:Bind ViewModel.AsrModelItems}" ItemTemplate="{StaticResource ModelCardTemplate}" AutomationProperties.AutomationId="AsrModelList" />
+
+          <TextBlock x:Uid="Settings_SummaryModels" Style="{StaticResource SectionHeaderStyle}" AutomationProperties.HeadingLevel="Level2" />
+          <TextBlock x:Uid="Settings_SummaryModelsHint" TextWrapping="Wrap" Style="{StaticResource CaptionTextBlockStyle}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}" Margin="0,0,0,4" />
+          <ItemsControl ItemsSource="{x:Bind ViewModel.SummaryModelItems}" ItemTemplate="{StaticResource ModelCardTemplate}" AutomationProperties.AutomationId="SummaryModelList" />
+
+          <TextBlock x:Name="ImportHeader" x:Uid="Settings_Tools" Style="{StaticResource SectionHeaderStyle}" AutomationProperties.HeadingLevel="Level2" />
+          <InfoBar x:Name="YtDlpNotice" Severity="Warning" IsClosable="True" AutomationProperties.AutomationId="YtDlpNotice" />
+          <TextBlock x:Uid="Settings_ToolsHint" TextWrapping="Wrap" Style="{StaticResource CaptionTextBlockStyle}"
+                     Foreground="{ThemeResource TextFillColorSecondaryBrush}" Margin="0,0,0,4" />
+          <Border Style="{StaticResource SettingsCardBorderStyle}">
+            <Grid ColumnSpacing="12">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+              <StackPanel Spacing="2" VerticalAlignment="Center">
+                <TextBlock x:Uid="Settings_YtDlp" />
+                <TextBlock Text="{x:Bind ViewModel.YtDlpStateText, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="Wrap"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}" AutomationProperties.AutomationId="YtDlpState" />
+              </StackPanel>
+              <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <Button x:Uid="YtDlp_Install" Style="{StaticResource AccentButtonStyle}" AutomationProperties.AutomationId="YtDlpInstall"
+                        Command="{x:Bind ViewModel.InstallYtDlpCommand}" Visibility="{x:Bind ViewModel.CanInstallYtDlp, Mode=OneWay}" />
+                <Button x:Uid="Model_Remove" Command="{x:Bind ViewModel.RemoveYtDlpCommand}" Visibility="{x:Bind ViewModel.IsYtDlpInstalled, Mode=OneWay}" />
+              </StackPanel>
+            </Grid>
+          </Border>
+          <Expander x:Uid="Settings_Advanced" Margin="0,8,0,0" AutomationProperties.AutomationId="ImportAdvanced">
+            <StackPanel Spacing="8">
+              <TextBlock x:Uid="Settings_YtDlpCustom" />
+              <TextBlock x:Uid="Settings_YtDlpHelp" Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="Wrap"
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="{x:Bind ViewModel.YtDlpPathText, Mode=OneWay}" VerticalAlignment="Center" IsTextSelectionEnabled="True" TextWrapping="Wrap" />
+                <Button x:Uid="Settings_YtDlpBrowse" AutomationProperties.AutomationId="YtDlpBrowse" Command="{x:Bind ViewModel.ChooseYtDlpCommand}" />
+                <Button x:Uid="Settings_YtDlpClear" Command="{x:Bind ViewModel.ClearYtDlpCommand}" Visibility="{x:Bind ViewModel.HasYtDlpPath, Mode=OneWay}" />
+              </StackPanel>
+            </StackPanel>
+          </Expander>
+        </StackPanel>
+
+        <!-- Data: storage, backup, maintenance -->
+        <StackPanel x:Name="DataPanel" Spacing="4" Visibility="Collapsed">
+          <TextBlock x:Uid="Settings_Storage" Style="{StaticResource SectionHeaderStyle}" AutomationProperties.HeadingLevel="Level2" />
+          <views:SettingCard x:Uid="Settings_LibraryFolder" Description="{x:Bind ViewModel.LibraryPath}">
+            <Button x:Uid="Settings_OpenLibrary" Command="{x:Bind ViewModel.OpenLibraryFolderCommand}" />
+          </views:SettingCard>
+          <views:SettingCard x:Uid="Settings_LibraryUsage">
+            <TextBlock Text="{x:Bind Maintenance.LibrarySize, Mode=OneWay}" />
+          </views:SettingCard>
+          <Expander x:Uid="Settings_UsageDetails" AutomationProperties.AutomationId="StorageDetails">
+            <Grid ColumnSpacing="24" RowSpacing="4" HorizontalAlignment="Left" AutomationProperties.AutomationId="StorageBreakdown">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+              </Grid.RowDefinitions>
+              <TextBlock x:Uid="Settings_LibrarySize" />
+              <TextBlock Grid.Column="1" Text="{x:Bind Maintenance.LibrarySize, Mode=OneWay}" />
+              <TextBlock Grid.Row="1" x:Uid="Settings_ModelsSize" />
+              <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind Maintenance.ModelsSize, Mode=OneWay}" />
+              <TextBlock Grid.Row="2" x:Uid="Settings_CacheSize" />
+              <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind Maintenance.CacheSize, Mode=OneWay}" />
+              <TextBlock Grid.Row="3" x:Uid="Settings_AppDataSize" />
+              <TextBlock Grid.Row="3" Grid.Column="1" Text="{x:Bind Maintenance.AppDataSize, Mode=OneWay}" />
+              <TextBlock Grid.Row="4" x:Uid="Settings_BackupsSize" />
+              <TextBlock Grid.Row="4" Grid.Column="1" Text="{x:Bind Maintenance.BackupsSize, Mode=OneWay}" />
+            </Grid>
+          </Expander>
+
+          <TextBlock x:Uid="Settings_Backup" Style="{StaticResource SectionHeaderStyle}" AutomationProperties.HeadingLevel="Level2" />
+          <Border Style="{StaticResource SettingsCardBorderStyle}">
+            <StackPanel Spacing="10">
+              <TextBlock x:Uid="Settings_BackupHelp" TextWrapping="Wrap" Style="{StaticResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+              <TextBlock Text="{x:Bind Maintenance.LastBackupText, Mode=OneWay}" />
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button x:Uid="Backup_Now" Style="{StaticResource AccentButtonStyle}" AutomationProperties.AutomationId="BackupNow" Command="{x:Bind Maintenance.BackupNowCommand}" />
+                <Button x:Uid="Backup_Restore" AutomationProperties.AutomationId="RestoreBackup" Command="{x:Bind Maintenance.RestoreCommand}" />
+                <Button x:Uid="Backup_OpenFolder" Command="{x:Bind Maintenance.OpenBackupsCommand}" />
+              </StackPanel>
+              <TextBlock Text="{x:Bind BackupFolderText}" IsTextSelectionEnabled="True" TextWrapping="Wrap" Style="{StaticResource CaptionTextBlockStyle}"
+                         Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            </StackPanel>
+          </Border>
+          <views:SettingCard x:Uid="Settings_AutomaticBackup">
+            <ToggleSwitch IsOn="{x:Bind ViewModel.AutomaticBackup, Mode=TwoWay}" />
+          </views:SettingCard>
+
+          <TextBlock x:Name="MaintenanceHeader" x:Uid="Settings_Maintenance" Style="{StaticResource SectionHeaderStyle}" AutomationProperties.HeadingLevel="Level2" />
+          <InfoBar IsOpen="{x:Bind Maintenance.Message, Mode=OneWay, Converter={StaticResource NotNullToBool}}" Message="{x:Bind Maintenance.Message, Mode=OneWay}"
+                   Severity="{x:Bind SeverityOf(Maintenance.IsMessageError), Mode=OneWay}" IsClosable="True" AutomationProperties.AutomationId="MaintenanceMessage" />
+          <views:SettingCard x:Uid="Diagnostics_Card">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Button x:Uid="Diagnostics_OpenLogs" Command="{x:Bind Maintenance.OpenLogsCommand}" />
+              <Button x:Uid="Diagnostics_Export" Style="{StaticResource AccentButtonStyle}" AutomationProperties.AutomationId="ExportDiagnostics"
+                      Command="{x:Bind Maintenance.ExportDiagnosticsCommand}" />
+            </StackPanel>
+          </views:SettingCard>
+          <Expander x:Uid="Settings_Troubleshoot" AutomationProperties.AutomationId="Troubleshooting">
+            <StackPanel Spacing="4">
+              <views:SettingCard x:Uid="Maintenance_ClearCacheCard">
+                <Button x:Uid="Maintenance_ClearCache" AutomationProperties.AutomationId="ClearCache" Command="{x:Bind Maintenance.ClearCacheCommand}" MinWidth="120" />
+              </views:SettingCard>
+              <views:SettingCard x:Uid="Maintenance_ResetConfigCard">
+                <Button x:Uid="Maintenance_ResetConfig" AutomationProperties.AutomationId="ResetConfig" Command="{x:Bind Maintenance.ResetConfigCommand}" MinWidth="120" />
+              </views:SettingCard>
+              <views:SettingCard x:Uid="Maintenance_FactoryResetCard">
+                <Button x:Uid="Maintenance_FactoryReset" AutomationProperties.AutomationId="FactoryReset" Command="{x:Bind Maintenance.FactoryResetCommand}" MinWidth="120" />
+              </views:SettingCard>
+              <views:SettingCard x:Uid="Maintenance_UninstallCard">
+                <Button x:Uid="Maintenance_Uninstall" AutomationProperties.AutomationId="Uninstall" Command="{x:Bind Maintenance.UninstallCommand}" MinWidth="120" />
+              </views:SettingCard>
+            </StackPanel>
+          </Expander>
+        </StackPanel>
+
+        <!-- General: appearance, notifications, about -->
+        <StackPanel x:Name="GeneralPanel" Spacing="4">
+          <TextBlock x:Uid="Settings_Appearance" Style="{StaticResource SectionHeaderStyle}" AutomationProperties.HeadingLevel="Level2" />
+          <views:SettingCard x:Uid="Settings_Theme">
+            <ComboBox ItemsSource="{x:Bind ViewModel.Themes}" SelectedItem="{x:Bind ViewModel.Theme, Mode=TwoWay}" MinWidth="200" />
+          </views:SettingCard>
+          <views:SettingCard x:Uid="Settings_UiLanguage">
+            <ComboBox ItemsSource="{x:Bind ViewModel.UiLanguages}" SelectedItem="{x:Bind ViewModel.UiLanguage, Mode=TwoWay}" MinWidth="200" />
+          </views:SettingCard>
+          <InfoBar x:Uid="Settings_RestartRequired" IsOpen="{x:Bind ViewModel.RestartRequired, Mode=OneWay}" Severity="Warning" IsClosable="False" />
+
+          <TextBlock x:Uid="Settings_NotificationsSection" Style="{StaticResource SectionHeaderStyle}" AutomationProperties.HeadingLevel="Level2" />
+          <views:SettingCard x:Uid="Settings_Notifications">
+            <ToggleSwitch IsOn="{x:Bind ViewModel.Notifications, Mode=TwoWay}" />
+          </views:SettingCard>
+          <views:SettingCard x:Uid="Settings_CheckForUpdates">
+            <StackPanel Orientation="Horizontal" Spacing="12">
+              <Button x:Uid="Settings_CheckUpdatesNow" Command="{x:Bind ViewModel.CheckUpdatesNowCommand}" AutomationProperties.AutomationId="CheckUpdatesNow" />
+              <ToggleSwitch IsOn="{x:Bind ViewModel.CheckForUpdates, Mode=TwoWay}" AutomationProperties.AutomationId="CheckForUpdates" />
+            </StackPanel>
+          </views:SettingCard>
+          <TextBlock Text="{x:Bind ViewModel.UpdateStatus, Mode=OneWay}" TextWrapping="Wrap" Margin="16,0,16,4"
+                     Style="{StaticResource CaptionTextBlockStyle}" AutomationProperties.AutomationId="UpdateStatus" />
+
+          <TextBlock x:Uid="Settings_About" Style="{StaticResource SectionHeaderStyle}" AutomationProperties.HeadingLevel="Level2" />
+          <Border Style="{StaticResource SettingsCardBorderStyle}">
+            <StackPanel Spacing="6">
+              <TextBlock Text="{x:Bind VersionText}" />
+              <TextBlock x:Uid="Settings_Privacy" TextWrapping="Wrap" Style="{StaticResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+              <StackPanel Orientation="Horizontal" Spacing="4" Margin="-12,0,0,0">
+                <HyperlinkButton x:Uid="Settings_Releases" Command="{x:Bind ViewModel.OpenReleasesCommand}" />
+                <HyperlinkButton x:Uid="Settings_Notices" AutomationProperties.AutomationId="ThirdPartyNotices" Click="OnShowNotices" />
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </StackPanel>
+      </Grid>
+      </Grid>
+    </ScrollViewer>
+  </Grid>
+</Page>

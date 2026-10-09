@@ -1,0 +1,34 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <Deterministic>true</Deterministic>
+    <Company>Kakitome</Company>
+    <Product>Kakitome</Product>
+    <Copyright>Copyright (c) 2026 Kakitome</Copyright>
+    <!-- Single source of truth for the app version (MSIX version is derived: Major.Minor.Build.0). -->
+    <VersionPrefix>2.0.0</VersionPrefix>
+    <!-- Pre-release label (empty for Stable). -->
+    <VersionSuffix></VersionSuffix>
+    <SatelliteResourceLanguages>en;ja</SatelliteResourceLanguages>
+    <!-- Windows target used by every Windows-specific project. 26100 = Windows 11 24H2. -->
+    <KakitomeWindowsTfm>net10.0-windows10.0.26100.0</KakitomeWindowsTfm>
+    <KakitomeWindowsMinVersion>10.0.26100.0</KakitomeWindowsMinVersion>
+  </PropertyGroup>
+
+  <!--
+    Unpackaged developer build (tools/Run-Dev.ps1): isolated bin/obj so it never clobbers the MSIX build.
+    Both roots stay excluded from default item globs in either mode.
+  -->
+  <PropertyGroup>
+    <DefaultItemExcludes>$(DefaultItemExcludes);bin/**;obj/**</DefaultItemExcludes>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(KakitomeUnpackaged)' == 'true'">
+    <BaseOutputPath>bin\unpackaged\</BaseOutputPath>
+    <BaseIntermediateOutputPath>obj\unpackaged\</BaseIntermediateOutputPath>
+  </PropertyGroup>
+</Project>

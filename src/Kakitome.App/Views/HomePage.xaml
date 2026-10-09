@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Page
+  x:Class="Kakitome.App.Views.HomePage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:views="using:Kakitome.App.Views"
+  xmlns:vm="using:Kakitome.Presentation.ViewModels">
+
+  <ScrollViewer>
+    <Grid Padding="32" ColumnSpacing="32" RowSpacing="24">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" MinWidth="320" />
+        <ColumnDefinition Width="*" MinWidth="280" />
+      </Grid.ColumnDefinitions>
+
+      <StackPanel Grid.Column="0" Spacing="16">
+        <InfoBar x:Uid="Home_NeedsModel" Severity="Informational" IsClosable="False"
+                 IsOpen="{x:Bind ViewModel.NeedsModel, Mode=OneWay}" Message="{x:Bind ViewModel.NeedsModelText, Mode=OneWay}"
+                 AutomationProperties.AutomationId="NeedsModel">
+          <InfoBar.ActionButton>
+            <Button x:Uid="Home_OpenModels" Command="{x:Bind ViewModel.OpenModelsCommand}" />
+          </InfoBar.ActionButton>
+        </InfoBar>
+        <!-- Closing it hides the notice for this version only. -->
+        <InfoBar x:Uid="Home_Update" Severity="Success" IsClosable="True" IsOpen="{x:Bind ViewModel.HasUpdate, Mode=OneWay}"
+                 Message="{x:Bind ViewModel.UpdateText, Mode=OneWay}" CloseButtonCommand="{x:Bind ViewModel.DismissUpdateCommand}"
+                 AutomationProperties.AutomationId="UpdateNotice">
+          <InfoBar.ActionButton>
+            <Button x:Uid="Update_Open" Style="{StaticResource AccentButtonStyle}" Command="{x:Bind ViewModel.OpenUpdateCommand}" />
+          </InfoBar.ActionButton>
+        </InfoBar>
+        <views:RecordingPanel />
+      </StackPanel>
+
+      <StackPanel Grid.Column="1" Spacing="12">
+        <InfoBar IsOpen="{x:Bind ViewModel.ImportMessage, Mode=OneWay, Converter={StaticResource NotNullToBool}}"
+                 Message="{x:Bind ViewModel.ImportMessage, Mode=OneWay}" Severity="Informational" IsClosable="True" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button x:Uid="Import_Button" AutomationProperties.AutomationId="ImportButton" Click="OnImportClicked" />
+          <Button x:Uid="ImportUrl_Button" AutomationProperties.AutomationId="ImportUrlButton" Click="OnImportUrlClicked" />
+        </StackPanel>
+        <TextBlock x:Uid="Home_DropHint" Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="Wrap"
+                   Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+
+        <TextBlock x:Uid="Home_Recent" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,16,0,0"
+                   AutomationProperties.HeadingLevel="Level2" />
+        <TextBlock x:Uid="Home_NoRecordings" TextWrapping="Wrap" Visibility="{x:Bind VisibleWhenFalse(ViewModel.HasRecent), Mode=OneWay}" />
+        <ListView ItemsSource="{x:Bind ViewModel.Recent}" IsItemClickEnabled="True" SelectionMode="None"
+                  ItemClick="OnRecentClicked" AutomationProperties.AutomationId="RecentList">
+          <ListView.ItemTemplate>
+            <DataTemplate x:DataType="vm:RecordingItemViewModel">
+              <StackPanel Padding="0,6" AutomationProperties.Name="{x:Bind AccessibleName}">
+                <TextBlock Text="{x:Bind Title}" Style="{StaticResource BodyStrongTextBlockStyle}" TextTrimming="CharacterEllipsis" />
+                <TextBlock Style="{StaticResource CaptionTextBlockStyle}" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+                  <Run Text="{x:Bind Project}" /><Run Text=" · " /><Run Text="{x:Bind DateText}" /><Run Text=" · " /><Run Text="{x:Bind DurationText}" />
+                </TextBlock>
+              </StackPanel>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
+
+        <TextBlock x:Uid="Home_Processing" Style="{StaticResource SubtitleTextBlockStyle}" Margin="0,16,0,0"
+                   AutomationProperties.HeadingLevel="Level2" />
+        <TextBlock Text="{x:Bind ViewModel.ProcessingText, Mode=OneWay}" TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" />
+        <HyperlinkButton x:Uid="Home_OpenQueue" Command="{x:Bind ViewModel.OpenQueueCommand}" />
+      </StackPanel>
+    </Grid>
+  </ScrollViewer>
+</Page>

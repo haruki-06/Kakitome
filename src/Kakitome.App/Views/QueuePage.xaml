@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+  x:Class="Kakitome.App.Views.QueuePage"
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:vm="using:Kakitome.Presentation.ViewModels"
+  xmlns:views="using:Kakitome.App.Views">
+
+  <!--
+    Processing steps are grouped per recording/file: one card each, so where one file ends and the next begins is
+    obvious. Cards in progress or with a failed step come first (expanded); finished ones follow (collapsed).
+  -->
+  <Page.Resources>
+    <!-- One processing step inside a card. -->
+    <DataTemplate x:Key="StepTemplate" x:DataType="vm:JobItemViewModel">
+      <Grid Padding="0,8" ColumnSpacing="12" RowSpacing="4">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="20" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <ProgressRing Width="16" Height="16" IsActive="{x:Bind IsRunning, Mode=OneWay}" Visibility="{x:Bind IsRunning, Mode=OneWay}"
+                      VerticalAlignment="Top" Margin="0,2,0,0" AutomationProperties.AccessibilityView="Raw" />
+        <FontIcon Glyph="{x:Bind Glyph, Mode=OneWay}" FontSize="16" VerticalAlignment="Top" Margin="0,2,0,0"
+                  Foreground="{x:Bind views:Bind.StateBrush(IsProblem, State), Mode=OneWay}"
+                  Visibility="{x:Bind views:Bind.VisibleIfNot(IsRunning), Mode=OneWay}" AutomationProperties.AccessibilityView="Raw" />
+        <StackPanel Grid.Column="1" Spacing="1">
+          <TextBlock TextWrapping="Wrap">
+            <Run Text="{x:Bind StageText, Mode=OneWay}" /><Run Text="  " /><Run Text="{x:Bind StateText, Mode=OneWay}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+          </TextBlock>
+          <TextBlock Text="{x:Bind DetailText, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="Wrap"
+                     Foreground="{x:Bind views:Bind.DetailBrush(IsProblem), Mode=OneWay}" Visibility="{x:Bind views:Bind.HasText(DetailText), Mode=OneWay}"
+                     IsTextSelectionEnabled="True" />
+          <TextBlock Text="{x:Bind EngineText, Mode=OneWay}" Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="Wrap"
+                     Foreground="{ThemeResource TextFillColorTertiaryBrush}" Visibility="{x:Bind views:Bind.HasText(EngineText), Mode=OneWay}"
+                     IsTextSelectionEnabled="True" />
+        </StackPanel>
+        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4" VerticalAlignment="Top">
+          <Button x:Uid="Queue_Pause" Visibility="{x:Bind CanPause, Mode=OneWay}" Click="OnPause" Tag="{x:Bind}" />
+          <Button x:Uid="Queue_Resume" Visibility="{x:Bind CanResume, Mode=OneWay}" Click="OnResume" Tag="{x:Bind}" />
+          <Button x:Uid="Queue_Retry" Style="{StaticResource AccentButtonStyle}" Visibility="{x:Bind CanRetry, Mode=OneWay}" Click="OnRetry" Tag="{x:Bind}" />
+          <Button x:Uid="Queue_Cancel" Visibility="{x:Bind CanCancel, Mode=OneWay}" Click="OnCancel" Tag="{x:Bind}" />
+        </StackPanel>
+        <ProgressBar Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Value="{x:Bind Progress, Mode=OneWay}" Maximum="100"
+                     IsIndeterminate="{x:Bind IsIndeterminate, Mode=OneWay}" Visibility="{x:Bind IsRunning, Mode=OneWay}"
+                     AutomationProperties.Name="{x:Bind StageText, Mode=OneWay}" />
+      </Grid>
+    </DataTemplate>
+
+    <!-- One recording/file: a card with its overall state, and its steps when expanded. -->
+    <DataTemplate x:Key="GroupTemplate" x:DataType="vm:JobGroupViewModel">
+      <Expander IsExpanded="{x:Bind IsExpanded, Mode=TwoWay}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                Margin="0,0,0,6" AutomationProperties.AutomationId="QueueGroup" AutomationProperties.Name="{x:Bind Title, Mode=OneWay}">
+        <Expander.Header>
+          <Grid Padding="0,10" ColumnSpacing="12" RowSpacing="6">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*" />
+              <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto" />
+              <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Spacing="2">
+              <TextBlock Text="{x:Bind Title, Mode=OneWay}" Style="{StaticResource BodyStrongTextBlockStyle}" TextTrimming="CharacterEllipsis" />
+              <TextBlock Style="{StaticResource CaptionTextBlockStyle}" TextTrimming="CharacterEllipsis">
+                <Run Text="{x:Bind StatusText, Mode=OneWay}" Foreground="{x:Bind views:Bind.DetailBrush(HasProblem), Mode=OneWay}" /><Run Text="  ·  " Foreground="{ThemeResource TextFillColorSecondaryBrush}" /><Run Text="{x:Bind TimeText, Mode=OneWay}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+              </TextBlock>
+            </StackPanel>
+            <Button Grid.Column="1" x:Uid="Queue_Open" VerticalAlignment="Center" Click="OnOpen" Tag="{x:Bind}"
+                    Visibility="{x:Bind CanOpen, Mode=OneWay}" AutomationProperties.AutomationId="QueueOpenRecording" />
+            <ProgressBar Grid.Row="1" Grid.ColumnSpan="2" Value="{x:Bind Progress, Mode=OneWay}" Maximum="100"
+                         Visibility="{x:Bind IsActive, Mode=OneWay}" AutomationProperties.Name="{x:Bind StatusText, Mode=OneWay}" />
+          </Grid>
+        </Expander.Header>
+        <ItemsControl ItemsSource="{x:Bind Jobs}" ItemTemplate="{StaticResource StepTemplate}" />
+      </Expander>
+    </DataTemplate>
+  </Page.Resources>
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" MaxWidth="1000" />
+      <ColumnDefinition Width="Auto" />
+    </Grid.ColumnDefinitions>
+    <ScrollViewer HorizontalScrollMode="Disabled" HorizontalScrollBarVisibility="Disabled" AutomationProperties.AutomationId="QueueList">
+      <StackPanel Padding="32,24" Spacing="8">
+        <TextBlock x:Uid="Queue_Header" Style="{StaticResource TitleTextBlockStyle}" AutomationProperties.HeadingLevel="Level1" />
+        <TextBlock Text="{x:Bind ViewModel.Summary, Mode=OneWay}" AutomationProperties.LiveSetting="Polite" Margin="0,0,0,8" />
+        <TextBlock x:Uid="Queue_Empty" Visibility="{x:Bind ViewModel.IsEmpty, Mode=OneWay}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+
+        <TextBlock x:Uid="Queue_SectionActive" Style="{StaticResource BodyStrongTextBlockStyle}" AutomationProperties.HeadingLevel="Level2"
+                   Visibility="{x:Bind ViewModel.HasActive, Mode=OneWay}" Margin="0,8,0,0" />
+        <ItemsControl ItemsSource="{x:Bind ViewModel.ActiveGroups}" ItemTemplate="{StaticResource GroupTemplate}" AutomationProperties.AutomationId="QueueActive" />
+
+        <TextBlock x:Uid="Queue_SectionFinished" Style="{StaticResource BodyStrongTextBlockStyle}" AutomationProperties.HeadingLevel="Level2"
+                   Visibility="{x:Bind ViewModel.HasFinished, Mode=OneWay}" Margin="0,16,0,0" />
+        <ItemsControl ItemsSource="{x:Bind ViewModel.FinishedGroups}" ItemTemplate="{StaticResource GroupTemplate}" AutomationProperties.AutomationId="QueueFinished" />
+      </StackPanel>
+    </ScrollViewer>
+  </Grid>
+</Page>

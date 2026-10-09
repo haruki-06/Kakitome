@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(KakitomeWindowsTfm)</TargetFramework>
+    <TargetPlatformMinVersion>$(KakitomeWindowsMinVersion)</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion>$(KakitomeWindowsMinVersion)</SupportedOSPlatformVersion>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <!-- Test names use underscores for readability; not every call needs the test cancellation token. -->
+    <NoWarn>$(NoWarn);CA1707;xUnit1051</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="Microsoft.Extensions.TimeProvider.Testing" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Kakitome.Domain\Kakitome.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Kakitome.Application\Kakitome.Application.csproj" />
+    <ProjectReference Include="..\..\src\Kakitome.Storage\Kakitome.Storage.csproj" />
+    <ProjectReference Include="..\..\src\Kakitome.Infrastructure\Kakitome.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Kakitome.Presentation\Kakitome.Presentation.csproj" />
+    <ProjectReference Include="..\..\tools\Kakitome.Bench\Kakitome.Bench.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+</Project>

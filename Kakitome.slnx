@@ -1,0 +1,29 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="ARM64" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/Kakitome.Domain/Kakitome.Domain.csproj" />
+    <Project Path="src/Kakitome.Application/Kakitome.Application.csproj" />
+    <Project Path="src/Kakitome.Storage/Kakitome.Storage.csproj" />
+    <Project Path="src/Kakitome.Presentation/Kakitome.Presentation.csproj" />
+    <Project Path="src/Kakitome.Infrastructure/Kakitome.Infrastructure.csproj" />
+    <Project Path="src/Kakitome.App/Kakitome.App.csproj">
+      <Platform Solution="*|x64" Project="x64" />
+      <Platform Solution="*|ARM64" Project="ARM64" />
+      <Deploy />
+    </Project>
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Kakitome.Bench/Kakitome.Bench.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Kakitome.Tests/Kakitome.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+  </Folder>
+</Solution>

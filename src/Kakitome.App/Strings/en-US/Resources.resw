@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AppDisplayName" xml:space="preserve"><value>Kakitome</value></data>
+  <data name="Recording_Header.Text" xml:space="preserve"><value>Record</value></data>
+  <data name="Recording_Microphone.Header" xml:space="preserve"><value>Microphone</value></data>
+  <data name="Recording_SystemAudio.Header" xml:space="preserve"><value>Also record system audio</value></data>
+  <data name="Recording_OutputDevice.Header" xml:space="preserve"><value>Output device to record</value></data>
+  <data name="Recording_AudioSource.Header" xml:space="preserve"><value>System audio to record</value></data>
+  <data name="Recording_AllPcAudio" xml:space="preserve"><value>All PC audio</value></data>
+  <data name="Recording_Project.Header" xml:space="preserve"><value>Project</value></data>
+  <data name="Recording_Project.PlaceholderText" xml:space="preserve"><value>Choose a project</value></data>
+  <data name="Recording_Title.Header" xml:space="preserve"><value>Title (optional)</value></data>
+  <data name="Recording_Start.Content" xml:space="preserve"><value>Start recording</value></data>
+  <data name="Recording_Stop.Content" xml:space="preserve"><value>Stop and save</value></data>
+  <data name="Recording_Cancel.Content" xml:space="preserve"><value>Discard</value></data>
+  <data name="Recording_Elapsed.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Recorded time</value></data>
+  <data name="Recording_Pause" xml:space="preserve"><value>Pause</value></data>
+  <data name="Recording_Resume" xml:space="preserve"><value>Resume</value></data>
+  <data name="Recording_DefaultDevice" xml:space="preserve"><value>Windows default ({0})</value></data>
+  <data name="Recording_DefaultDeviceNone" xml:space="preserve"><value>Windows default</value></data>
+  <data name="State_Idle" xml:space="preserve"><value>Ready to record</value></data>
+  <data name="State_Recording" xml:space="preserve"><value>Recording</value></data>
+  <data name="State_Paused" xml:space="preserve"><value>Paused</value></data>
+  <data name="State_Suspended" xml:space="preserve"><value>Paused while the PC sleeps</value></data>
+  <data name="State_Stopping" xml:space="preserve"><value>Saving…</value></data>
+  <data name="State_Stopped" xml:space="preserve"><value>Saved</value></data>
+  <data name="State_Cancelled" xml:space="preserve"><value>Discarded</value></data>
+  <data name="Stream_Active" xml:space="preserve"><value>Capturing</value></data>
+  <data name="Stream_Reconnecting" xml:space="preserve"><value>Device disconnected — waiting for it to come back (recording continues)</value></data>
+  <data name="Stream_Stopped" xml:space="preserve"><value>Stopped</value></data>
+  <data name="Stream_Failed" xml:space="preserve"><value>Could not write audio</value></data>
+  <data name="Kind_Microphone" xml:space="preserve"><value>Microphone</value></data>
+  <data name="Kind_SystemAudio" xml:space="preserve"><value>System audio</value></data>
+  <data name="Kind_Application" xml:space="preserve"><value>App audio</value></data>
+  <data name="CancelDialog_Title" xml:space="preserve"><value>Discard this recording?</value></data>
+  <data name="CancelDialog_Content" xml:space="preserve"><value>The recording will be moved to the Recycle Bin. You can restore it from there.</value></data>
+  <data name="CancelDialog_Primary" xml:space="preserve"><value>Discard</value></data>
+  <data name="CancelDialog_Close" xml:space="preserve"><value>Keep recording</value></data>
+  <data name="Error_InsufficientDisk" xml:space="preserve"><value>There is not enough free disk space to record safely. Free up space and try again.</value></data>
+  <data name="Error_DeviceUnavailable" xml:space="preserve"><value>The selected audio device is not available. Check the connection or choose another device.</value></data>
+  <data name="Error_NoSources" xml:space="preserve"><value>Choose at least one audio source.</value></data>
+  <data name="Error_StartFailed" xml:space="preserve"><value>Recording could not be started. Please try again.</value></data>
+  <data name="Error_StopFailed" xml:space="preserve"><value>The recording could not be finalized. The audio is kept and will be repaired the next time Kakitome starts.</value></data>
+  <data name="Error_AlreadyRecording" xml:space="preserve"><value>A recording is already in progress.</value></data>
+  <data name="Info_Saved" xml:space="preserve"><value>Saved to {0}</value></data>
+  <data name="Info_StoppedUnexpectedly" xml:space="preserve"><value>Recording stopped unexpectedly (for example, the disk is almost full). The audio recorded so far has been saved.</value></data>
+  <data name="Info_HotkeyUnavailable" xml:space="preserve"><value>The shortcut {0} is already used by another app. You can change it in Settings.</value></data>
+  <data name="Tray_Start" xml:space="preserve"><value>Start recording</value></data>
+  <data name="Tray_Stop" xml:space="preserve"><value>Stop and save</value></data>
+  <data name="Tray_Open" xml:space="preserve"><value>Open Kakitome</value></data>
+  <data name="Tray_Exit" xml:space="preserve"><value>Exit</value></data>
+  <data name="Tray_Tooltip_Idle" xml:space="preserve"><value>Kakitome</value></data>
+  <data name="Tray_Tooltip_Recording" xml:space="preserve"><value>Kakitome — recording</value></data>
+  <data name="Nav_Home.Content" xml:space="preserve"><value>Home</value></data>
+  <data name="Nav_Library.Content" xml:space="preserve"><value>Library</value></data>
+  <data name="Nav_Projects.Content" xml:space="preserve"><value>Projects</value></data>
+  <data name="Nav_Queue.Content" xml:space="preserve"><value>Processing</value></data>
+  <data name="Nav_Search.Content" xml:space="preserve"><value>Search</value></data>
+  <data name="Home_Recent.Text" xml:space="preserve"><value>Recent recordings</value></data>
+  <data name="Home_NoRecordings.Text" xml:space="preserve"><value>No recordings yet. Start a recording or import audio or video files.</value></data>
+  <data name="Home_NeedsModel.Title" xml:space="preserve"><value>Install a speech recognition model</value></data>
+  <data name="Home_NeedsModelText" xml:space="preserve"><value>Transcripts are created on this PC. Download a model once to enable transcription.</value></data>
+  <data name="Home_ModelDownloading" xml:space="preserve"><value>Downloading the recommended model for this PC ({0}). Transcription starts once it is ready; progress is shown in the processing queue.</value></data>
+  <data name="Home_OpenModels.Content" xml:space="preserve"><value>Open model settings</value></data>
+  <data name="Home_Processing.Text" xml:space="preserve"><value>Processing</value></data>
+  <data name="Home_OpenQueue.Content" xml:space="preserve"><value>Open processing queue</value></data>
+  <data name="Home_DropHint.Text" xml:space="preserve"><value>You can also drop audio or video files onto this window to import them.</value></data>
+  <data name="Import_Button.Content" xml:space="preserve"><value>Import files…</value></data>
+  <data name="Info_Importing" xml:space="preserve"><value>Importing {0} file(s) into the project "{1}"…</value></data>
+  <data name="ImportUrl_Button.Content" xml:space="preserve"><value>Import from URL…</value></data>
+  <data name="ImportUrl_Title" xml:space="preserve"><value>Import from a URL</value></data>
+  <data name="ImportUrl_Placeholder" xml:space="preserve"><value>https://…</value></data>
+  <data name="ImportUrl_Help" xml:space="preserve"><value>Kakitome downloads the audio with yt-dlp and transcribes it on this PC. Only import media you are allowed to download.</value></data>
+  <data name="ImportUrl_Start" xml:space="preserve"><value>Import</value></data>
+  <data name="ImportUrl_Invalid" xml:space="preserve"><value>Enter an http:// or https:// address.</value></data>
+  <data name="ImportUrl_NeedsTool" xml:space="preserve"><value>URL import needs yt-dlp. Install it (or choose your own yt-dlp.exe) in Settings &gt; Import.</value></data>
+  <data name="Info_ImportingUrl" xml:space="preserve"><value>Downloading from {0} into the project "{1}"…</value></data>
+  <data name="Error_ImportUnsupported" xml:space="preserve"><value>{0} is not a supported file type.</value></data>
+  <data name="Library_Header.Text" xml:space="preserve"><value>Library</value></data>
+  <data name="Library_Filter.PlaceholderText" xml:space="preserve"><value>Filter by title, project or tag</value></data>
+  <data name="Library_Empty.Text" xml:space="preserve"><value>No recordings match.</value></data>
+  <data name="Library_ShowAll.Content" xml:space="preserve"><value>Show all projects</value></data>
+  <data name="Library_Open.Text" xml:space="preserve"><value>Open</value></data>
+  <data name="Library_OpenFolder.Text" xml:space="preserve"><value>Show in File Explorer</value></data>
+  <data name="Library_Delete.Text" xml:space="preserve"><value>Move to Recycle Bin…</value></data>
+  <data name="Status_Recording" xml:space="preserve"><value>Recording</value></data>
+  <data name="Status_Processing" xml:space="preserve"><value>Processing: {0}</value></data>
+  <data name="Status_Failed" xml:space="preserve"><value>{0} failed</value></data>
+  <data name="Status_ExternalChanges" xml:space="preserve"><value>Edited outside Kakitome</value></data>
+  <data name="Status_Ready" xml:space="preserve"><value>Transcript and summary ready</value></data>
+  <data name="Status_Transcribed" xml:space="preserve"><value>Transcribed</value></data>
+  <data name="Status_NotTranscribed" xml:space="preserve"><value>Not transcribed</value></data>
+  <data name="Stage_audio_analyze" xml:space="preserve"><value>Audio analysis</value></data>
+  <data name="Stage_asr" xml:space="preserve"><value>Transcription</value></data>
+  <data name="Stage_cleanup" xml:space="preserve"><value>Cleanup</value></data>
+  <data name="Stage_summary" xml:space="preserve"><value>Summary</value></data>
+  <data name="Stage_index" xml:space="preserve"><value>Search index</value></data>
+  <data name="Stage_model_install" xml:space="preserve"><value>Model download</value></data>
+  <data name="Stage_import_file" xml:space="preserve"><value>Import</value></data>
+  <data name="Stage_import_url" xml:space="preserve"><value>Download</value></data>
+  <data name="Notify_Ready" xml:space="preserve"><value>Transcript and summary are ready</value></data>
+  <data name="Notify_ReadyMany" xml:space="preserve"><value>{0} recordings have been processed.</value></data>
+  <data name="Notify_Failed" xml:space="preserve"><value>Processing failed</value></data>
+  <data name="Notify_FailedBody" xml:space="preserve"><value>{0} — {1}</value></data>
+  <data name="Notify_FailedMany" xml:space="preserve"><value>{0} jobs failed. Open the processing queue for details.</value></data>
+  <data name="Queue_Header.Text" xml:space="preserve"><value>Processing queue</value></data>
+  <data name="Queue_Empty.Text" xml:space="preserve"><value>Nothing has been processed in the last 7 days.</value></data>
+  <data name="Queue_AllDone" xml:space="preserve"><value>All processing is complete.</value></data>
+  <data name="Queue_ActiveCount" xml:space="preserve"><value>{0} item(s) in progress or waiting.</value></data>
+  <data name="Queue_Engine" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="Locality_Local" xml:space="preserve"><value>on this PC</value></data>
+  <data name="Queue_Cancel.Content" xml:space="preserve"><value>Cancel</value></data>
+  <data name="Queue_Retry.Content" xml:space="preserve"><value>Retry</value></data>
+  <data name="Queue_Pause.Content" xml:space="preserve"><value>Pause</value></data>
+  <data name="Queue_Resume.Content" xml:space="preserve"><value>Resume</value></data>
+  <data name="Queue_Open.Content" xml:space="preserve"><value>Open recording</value></data>
+  <data name="JobState_Pending" xml:space="preserve"><value>Waiting</value></data>
+  <data name="JobState_Running" xml:space="preserve"><value>Running</value></data>
+  <data name="JobState_Paused" xml:space="preserve"><value>Paused</value></data>
+  <data name="JobState_Succeeded" xml:space="preserve"><value>Done</value></data>
+  <data name="JobState_Failed" xml:space="preserve"><value>Failed</value></data>
+  <data name="JobState_Cancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="Wait_None" xml:space="preserve"><value>Starting soon</value></data>
+  <data name="Wait_Dependency" xml:space="preserve"><value>Waiting for the previous step</value></data>
+  <data name="Wait_RetryBackoff" xml:space="preserve"><value>Will retry shortly</value></data>
+  <data name="Wait_OnBattery" xml:space="preserve"><value>Waiting for AC power to save battery</value></data>
+  <data name="Wait_EnergySaver" xml:space="preserve"><value>Waiting while Energy Saver is on</value></data>
+  <data name="Wait_LowBattery" xml:space="preserve"><value>Waiting: battery is low</value></data>
+  <data name="Wait_SystemBusy" xml:space="preserve"><value>Waiting until the PC is less busy</value></data>
+  <data name="Wait_LowMemory" xml:space="preserve"><value>Waiting for free memory</value></data>
+  <data name="Wait_LowDiskSpace" xml:space="preserve"><value>Paused: the disk is almost full</value></data>
+  <data name="Wait_RecordingInProgress" xml:space="preserve"><value>Waiting until the recording ends</value></data>
+  <data name="Wait_ConcurrencyLimit" xml:space="preserve"><value>Waiting for another task to finish</value></data>
+  <data name="Search_Header.Text" xml:space="preserve"><value>Search</value></data>
+  <data name="Search_Box.PlaceholderText" xml:space="preserve"><value>Search titles, transcripts and summaries</value></data>
+  <data name="Search_NoResults" xml:space="preserve"><value>No matches.</value></data>
+  <data name="Search_ResultCount" xml:space="preserve"><value>{0} recording(s), {1} match(es)</value></data>
+  <data name="HitKind_Title" xml:space="preserve"><value>Title</value></data>
+  <data name="HitKind_Transcript" xml:space="preserve"><value>Transcript</value></data>
+  <data name="HitKind_Summary" xml:space="preserve"><value>Summary</value></data>
+  <data name="Projects_Header.Text" xml:space="preserve"><value>Projects</value></data>
+  <data name="Projects_NewName.PlaceholderText" xml:space="preserve"><value>New project name</value></data>
+  <data name="Projects_Create.Content" xml:space="preserve"><value>Create project</value></data>
+  <data name="Projects_NewName.Header" xml:space="preserve"><value>New project</value></data>
+  <data name="Projects_NameRequired" xml:space="preserve"><value>Type a name for the new project first.</value></data>
+  <data name="Projects_AlreadyExists" xml:space="preserve"><value>A project named “{0}” already exists.</value></data>
+  <data name="Recording_NewProject.Content" xml:space="preserve"><value>New…</value></data>
+  <data name="Recording_NewProject.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>New project</value></data>
+  <data name="NewProjectDialog_Title" xml:space="preserve"><value>New project</value></data>
+  <data name="NewProjectDialog_Placeholder" xml:space="preserve"><value>Project name</value></data>
+  <data name="NewProjectDialog_Primary" xml:space="preserve"><value>Create</value></data>
+  <data name="Projects_CountAndLast" xml:space="preserve"><value>{0} recording(s) · last {1}</value></data>
+  <data name="Projects_Empty" xml:space="preserve"><value>No recordings yet</value></data>
+  <data name="Info_ProjectCreated" xml:space="preserve"><value>Created project “{0}”.</value></data>
+  <data name="Detail_TabTranscript.Text" xml:space="preserve"><value>Transcript</value></data>
+  <data name="Detail_TabSummary.Text" xml:space="preserve"><value>Summary</value></data>
+  <data name="Detail_NoTranscript.Text" xml:space="preserve"><value>No transcript yet. It is created automatically after recording, or use Re-transcribe.</value></data>
+  <data name="Detail_NoSummary.Text" xml:space="preserve"><value>No summary yet.</value></data>
+  <data name="Detail_NoAudio" xml:space="preserve"><value>Audio is not available for this recording.</value></data>
+  <data name="Detail_AudioRemoved" xml:space="preserve"><value>The audio was removed on {0} after processing, as set in Settings &gt; Recording. The transcript and summary are kept.</value></data>
+  <data name="Detail_ReTranscribe.Label" xml:space="preserve"><value>Re-transcribe</value></data>
+  <data name="Detail_RegenerateSummary.Label" xml:space="preserve"><value>Regenerate summary</value></data>
+  <data name="Detail_OpenFolder.Label" xml:space="preserve"><value>Show in File Explorer</value></data>
+  <data name="Detail_TranscriptInfo" xml:space="preserve"><value>{0} · {1}</value></data>
+  <data name="Detail_Suggestions.Text" xml:space="preserve"><value>Suggested edits</value></data>
+  <data name="Detail_SuggestionText" xml:space="preserve"><value>“{0}” → {1}</value></data>
+  <data name="Detail_Accept.Content" xml:space="preserve"><value>Apply</value></data>
+  <data name="Detail_EditHint.Text" xml:space="preserve"><value>Click the text to play from there. Double-click (or press F2) to correct the part being played. Corrections are kept when cleanup runs again.</value></data>
+  <data name="TranscriptKind_Raw" xml:space="preserve"><value>Raw</value></data>
+  <data name="TranscriptKind_Clean" xml:space="preserve"><value>Cleaned</value></data>
+  <data name="TranscriptKind_Edited" xml:space="preserve"><value>Edited</value></data>
+  <data name="Summary_KeyPoints" xml:space="preserve"><value>Key points</value></data>
+  <data name="Summary_Decisions" xml:space="preserve"><value>Decisions</value></data>
+  <data name="Summary_ActionItems" xml:space="preserve"><value>Action items</value></data>
+  <data name="Summary_Questions" xml:space="preserve"><value>Open questions</value></data>
+  <data name="Summary_Topics" xml:space="preserve"><value>Topics</value></data>
+  <data name="Summary_Owner" xml:space="preserve"><value>owner: {0}</value></data>
+  <data name="Summary_Due" xml:space="preserve"><value>due: {0}</value></data>
+  <data name="Dialog_Cancel" xml:space="preserve"><value>Cancel</value></data>
+  <data name="DeleteDialog_Title" xml:space="preserve"><value>Move this recording to the Recycle Bin?</value></data>
+  <data name="DeleteDialog_Content" xml:space="preserve"><value>“{0}” and its files (audio, transcript, summary) will be moved to the Recycle Bin. You can restore them from there.</value></data>
+  <data name="DeleteDialog_Primary" xml:space="preserve"><value>Move to Recycle Bin</value></data>
+  <data name="Info_MovedToRecycleBin" xml:space="preserve"><value>“{0}” was moved to the Recycle Bin.</value></data>
+  <data name="Error_RecycleBinUnavailable" xml:space="preserve"><value>This folder cannot be moved to the Recycle Bin, so nothing was deleted.</value></data>
+  <data name="RetranscribeDialog_Title" xml:space="preserve"><value>Transcribe again?</value></data>
+  <data name="RetranscribeDialog_Content" xml:space="preserve"><value>The current transcript will be replaced. A transcript.md you edited by hand is kept as a separate copy.</value></data>
+  <data name="RetranscribeDialog_Primary" xml:space="preserve"><value>Transcribe again</value></data>
+  <data name="Info_Queued" xml:space="preserve"><value>Added to the processing queue.</value></data>
+  <data name="Error_ExternalEditConflict" xml:space="preserve"><value>The transcript files were edited outside Kakitome. Reload the recording before editing here.</value></data>
+  <data name="Error_RecordingMissing" xml:space="preserve"><value>This recording is no longer in the Library.</value></data>
+  <data name="Error_RecordingUnreadable" xml:space="preserve"><value>This recording could not be read: {0}</value></data>
+  <data name="Settings_Recording.Text" xml:space="preserve"><value>Recording</value></data>
+  <data name="Settings_SystemAudio.Header" xml:space="preserve"><value>Also record system audio by default</value></data>
+  <data name="Settings_PreventSleep.Header" xml:space="preserve"><value>Keep the PC awake while recording</value></data>
+  <data name="Settings_KeepRecording.Header" xml:space="preserve"><value>Keep recording when the window is closed</value></data>
+  <data name="Settings_Hotkey.Header" xml:space="preserve"><value>Start/stop shortcut</value></data>
+  <data name="Settings_Transcription.Text" xml:space="preserve"><value>Transcription</value></data>
+  <data name="Settings_Language.Header" xml:space="preserve"><value>Spoken language</value></data>
+  <data name="Settings_AsrModel.Header" xml:space="preserve"><value>Speech recognition model</value></data>
+  <data name="Settings_Glossary.Text" xml:space="preserve"><value>Glossary</value></data>
+  <data name="Settings_GlossaryHelp.Text" xml:space="preserve"><value>Terms and names in a glossary are given to speech recognition as hints, and its corrections are applied after transcription. Kakitome does not come with one: import a text file that you or an AI assistant wrote.</value></data>
+  <data name="Glossary_Scope.Header" xml:space="preserve"><value>Applies to</value></data>
+  <data name="Glossary_ScopeAll" xml:space="preserve"><value>All recordings</value></data>
+  <data name="Glossary_ScopeProject" xml:space="preserve"><value>Project: {0}</value></data>
+  <data name="Glossary_Status" xml:space="preserve"><value>{0} terms, {1} corrections</value></data>
+  <data name="Glossary_None" xml:space="preserve"><value>No glossary</value></data>
+  <data name="Glossary_Import.Content" xml:space="preserve"><value>Import .txt…</value></data>
+  <data name="Glossary_Edit.Content" xml:space="preserve"><value>Edit</value></data>
+  <data name="Glossary_Remove.Content" xml:space="preserve"><value>Stop using</value></data>
+  <data name="Glossary_Imported" xml:space="preserve"><value>Imported {0} terms and {1} corrections.</value></data>
+  <data name="Glossary_Skipped" xml:space="preserve"><value>{0} line(s) were skipped (first: line {1}, "{2}").</value></data>
+  <data name="Glossary_PreviousKept" xml:space="preserve"><value>The previous glossary was kept as {0}.</value></data>
+  <data name="Glossary_ApplyHint" xml:space="preserve"><value>It is used for new transcriptions; to apply it to an existing recording, use Re-transcribe on that recording.</value></data>
+  <data name="Glossary_Invalid_tooLarge" xml:space="preserve"><value>This file is too large for a glossary (512 KB at most).</value></data>
+  <data name="Glossary_Invalid_notText" xml:space="preserve"><value>This is not a text file.</value></data>
+  <data name="Glossary_Invalid_empty" xml:space="preserve"><value>No entries were found. Write one term per line.</value></data>
+  <data name="Glossary_Failed" xml:space="preserve"><value>Could not import the glossary: {0}</value></data>
+  <data name="Glossary_EditHint" xml:space="preserve"><value>Opened in your text editor. Save the file and it is used from the next transcription.</value></data>
+  <data name="Glossary_RemoveTitle" xml:space="preserve"><value>Stop using this glossary?</value></data>
+  <data name="Glossary_RemoveContent" xml:space="preserve"><value>The file is not deleted. It is renamed to glossary.removed-&lt;date&gt;.txt in the same folder.</value></data>
+  <data name="Glossary_RemovePrimary" xml:space="preserve"><value>Stop using</value></data>
+  <data name="Glossary_Removed" xml:space="preserve"><value>The glossary is no longer used. The file was kept as {0}.</value></data>
+  <data name="Glossary_Copied" xml:space="preserve"><value>Copied. Paste it into your AI assistant, save the answer as a .txt file, then import it.</value></data>
+  <data name="Glossary_HowTo.Header" xml:space="preserve"><value>Format, and how to make one with AI</value></data>
+  <data name="Glossary_AiHeader.Text" xml:space="preserve"><value>Request to give an AI assistant</value></data>
+  <data name="Glossary_AiRequestBox.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve"><value>Request text</value></data>
+  <data name="Glossary_Copy.Content" xml:space="preserve"><value>Copy</value></data>
+  <data name="Glossary_Format" xml:space="preserve"><value>A glossary is a UTF-8 text file with one entry per line:
+• a term, name or proper noun, e.g. Kubernetes. These are given to speech recognition as hints. Put the most important ones first: about 20 are used at a time, and the rest take turns.
+• a correction "wrong -&gt; right", e.g. cube cuddle -&gt; kubectl. Applied to every transcript after recognition; the original wording stays in transcript.json.
+• lines starting with # are notes.
+The shared glossary is Library\Projects\glossary.txt; a project's glossary is glossary.txt in that project's folder. Both are used for recordings in the project.</value></data>
+  <data name="Glossary_AiRequest" xml:space="preserve"><value>Please write a glossary for transcribing audio about: [describe the subject, course or meeting here]
+
+Format (plain text, one entry per line, no numbering or explanations):
+- Technical terms, people's names, product names, case names and other proper nouns from this field, most important first, at most about 200 lines.
+- If you know a likely mishearing, add a line "wrong -&gt; right", e.g. cube cuddle -&gt; kubectl.
+- Lines starting with # are comments.</value></data>
+  <data name="Detail_GlossaryTip.Title" xml:space="preserve"><value>A glossary can improve accuracy</value></data>
+  <data name="GlossaryTip_Text" xml:space="preserve"><value>If technical terms or names were written as other words that sound the same, a glossary fixes them. 1) Copy the request and give it to an AI assistant together with transcript.txt from this recording's folder. 2) Save the answer as a .txt file and choose "Import glossary and transcribe again". The glossary is used for every recording in the project "{0}".</value></data>
+  <data name="Detail_GlossaryCopy.Content" xml:space="preserve"><value>Copy request for an AI</value></data>
+  <data name="Detail_GlossaryShowFile.Content" xml:space="preserve"><value>Show transcript.txt</value></data>
+  <data name="Detail_GlossaryImport.Content" xml:space="preserve"><value>Import glossary and transcribe again…</value></data>
+  <data name="Detail_GlossaryHide.Content" xml:space="preserve"><value>Don't show this tip again</value></data>
+  <data name="GlossaryTip_Topics" xml:space="preserve"><value> Topics: {0}.</value></data>
+  <data name="GlossaryTip_TopicSeparator" xml:space="preserve"><value>, </value></data>
+  <data name="GlossaryTip_Request" xml:space="preserve"><value>The attached transcript (transcript.txt) of "{0}" was made by speech recognition.{1}
+Some technical terms, names, case names or product names were written as other words that sound the same or similar.
+Please write a glossary for this subject that I can also use for future recordings, in this format (plain text, one entry per line, no numbering or explanations):
+- Each misrecognition in the transcript as "wrong -&gt; right". Copy "wrong" exactly as it appears in the transcript (at least 2 characters), e.g. cube cuddle -&gt; kubectl.
+- Do not use an ordinary word that is correct elsewhere in the text as "wrong": it is replaced everywhere.
+- Leave out corrections you are not sure about.
+- Then the important technical terms, names and proper nouns of this field, most important first, at most about 200 lines.
+- Lines starting with # are comments.</value></data>
+  <data name="GlossaryTip_Copied" xml:space="preserve"><value>Copied. Paste it into the AI assistant you use and attach transcript.txt. Kakitome itself sends nothing.</value></data>
+  <data name="GlossaryTip_Imported" xml:space="preserve"><value>Glossary of the project "{0}" imported: {1} terms, {2} corrections.</value></data>
+  <data name="GlossaryTip_Hidden" xml:space="preserve"><value>This tip will not be shown again. You can turn it back on in Settings › Transcription › Glossary.</value></data>
+  <data name="Notify_GlossaryTip" xml:space="preserve"><value>Tip: a glossary can fix misrecognized technical terms.</value></data>
+  <data name="Settings_GlossaryTips.Content" xml:space="preserve"><value>Suggest a glossary for longer recordings that have none</value></data>
+  <data name="Settings_Mode.Header" xml:space="preserve"><value>When to process</value></data>
+  <data name="Settings_AutoProcess.Header" xml:space="preserve"><value>Transcribe and summarize new recordings automatically</value></data>
+  <data name="Settings_Models.Text" xml:space="preserve"><value>Models</value></data>
+  <data name="Settings_ModelsHint.Text" xml:space="preserve"><value>Models run on this PC and are stored separately from your Library; they can be removed at any time. Models that use an NPU are not supported yet.</value></data>
+  <data name="Settings_Header.Text" xml:space="preserve"><value>Settings</value></data>
+  <data name="Settings_YtDlp.Text" xml:space="preserve"><value>yt-dlp (needed to import from URLs)</value></data>
+  <data name="Settings_YtDlpHelp.Text" xml:space="preserve"><value>Install the verified copy above, or choose a yt-dlp.exe you downloaded yourself. The installed copy is used when present.</value></data>
+  <data name="Settings_YtDlpBrowse.Content" xml:space="preserve"><value>Choose yt-dlp.exe…</value></data>
+  <data name="Settings_YtDlpClear.Content" xml:space="preserve"><value>Clear</value></data>
+  <data name="Settings_YtDlpNone" xml:space="preserve"><value>Not set</value></data>
+  <data name="Settings_Storage.Text" xml:space="preserve"><value>Storage</value></data>
+  <data name="Settings_OpenLibrary.Content" xml:space="preserve"><value>Open</value></data>
+  <data name="Settings_LibrarySize.Text" xml:space="preserve"><value>Library</value></data>
+  <data name="Settings_ModelsSize.Text" xml:space="preserve"><value>Models</value></data>
+  <data name="Settings_Retention.Header" xml:space="preserve"><value>Keep recordings as</value></data>
+  <data name="Retention_raw" xml:space="preserve"><value>Original quality (lossless WAV)</value></data>
+  <data name="Retention_m4a" xml:space="preserve"><value>M4A (AAC, smaller) after processing</value></data>
+  <data name="Retention_mp3" xml:space="preserve"><value>MP3 (smaller) after processing</value></data>
+  <data name="Retention_deleteAfterProcessing" xml:space="preserve"><value>Delete audio after processing (keep text only)</value></data>
+  <data name="RetentionDeleteDialog_Title" xml:space="preserve"><value>Delete audio after processing?</value></data>
+  <data name="RetentionDeleteDialog_Content" xml:space="preserve"><value>From now on, a recording's audio is deleted once its transcript and summary have been created successfully. You will not be able to play it or transcribe it again. Each recording's metadata notes that its audio was removed.</value></data>
+  <data name="RetentionDeleteDialog_Primary" xml:space="preserve"><value>Delete audio after processing</value></data>
+  <data name="Settings_LiveTranscript.Header" xml:space="preserve"><value>Show a live transcript while recording</value></data>
+  <data name="Live_Header.Text" xml:space="preserve"><value>Live transcript (preview)</value></data>
+  <data name="Live_Starting" xml:space="preserve"><value>Loading {0}…</value></data>
+  <data name="Live_Running" xml:space="preserve"><value>{0} on this PC. This is a preview; the final transcript is made after recording and may differ.</value></data>
+  <data name="Live_NoModel" xml:space="preserve"><value>Install a speech recognition model in Settings &gt; Models to see a live transcript.</value></data>
+  <data name="Live_PowerSaving" xml:space="preserve"><value>Live transcript is paused to save battery. The recording continues normally.</value></data>
+  <data name="Live_SourceMic" xml:space="preserve"><value>Mic</value></data>
+  <data name="Live_SourceOthers" xml:space="preserve"><value>PC audio</value></data>
+  <data name="Model_Verify.Content" xml:space="preserve"><value>Verify</value></data>
+  <data name="Model_Repair.Content" xml:space="preserve"><value>Repair</value></data>
+  <data name="Model_Verifying" xml:space="preserve"><value>Checking the files…</value></data>
+  <data name="Model_Verified" xml:space="preserve"><value>Verified: the files match the published checksums.</value></data>
+  <data name="Model_VerifyFailed" xml:space="preserve"><value>The files are damaged and will not be used. Choose Repair to download the damaged parts again.</value></data>
+  <data name="Settings_Notices.Content" xml:space="preserve"><value>Third-party notices</value></data>
+  <data name="Notices_Title" xml:space="preserve"><value>Third-party notices</value></data>
+  <data name="Notices_Missing" xml:space="preserve"><value>The notices file was not found in this installation.</value></data>
+  <data name="Dialog_Close" xml:space="preserve"><value>Close</value></data>
+  <data name="YtDlp_Install.Content" xml:space="preserve"><value>Install yt-dlp</value></data>
+  <data name="YtDlp_Installed" xml:space="preserve"><value>{0} is installed (verified).</value></data>
+  <data name="YtDlp_NotInstalled" xml:space="preserve"><value>Not installed.</value></data>
+  <data name="YtDlpDialog_Title" xml:space="preserve"><value>Download yt-dlp?</value></data>
+  <data name="YtDlpDialog_Content" xml:space="preserve"><value>{0} ({1}) will be downloaded from {2} and checked against its published SHA-256 before use. License: {3}. It is used only when you import from a URL.</value></data>
+  <data name="Settings_SummaryEngine.Header" xml:space="preserve"><value>Summaries</value></data>
+  <data name="SummaryEngine_auto" xml:space="preserve"><value>Local AI when installed (better; uses more power), otherwise extraction</value></data>
+  <data name="SummaryEngine_extractive" xml:space="preserve"><value>Extraction only (fast, light)</value></data>
+  <data name="Settings_CacheSize.Text" xml:space="preserve"><value>Cache</value></data>
+  <data name="Settings_AppDataSize.Text" xml:space="preserve"><value>App data (settings, index, logs)</value></data>
+  <data name="Settings_BackupsSize.Text" xml:space="preserve"><value>Backups</value></data>
+  <data name="Settings_Backup.Text" xml:space="preserve"><value>Backup</value></data>
+  <data name="Settings_BackupHelp.Text" xml:space="preserve"><value>A backup is one .kakitome-backup file with all recordings, transcripts and summaries (models are not included; they can be downloaded again).</value></data>
+  <data name="Backup_Now.Content" xml:space="preserve"><value>Back up now</value></data>
+  <data name="Backup_Restore.Content" xml:space="preserve"><value>Restore from backup…</value></data>
+  <data name="Backup_OpenFolder.Content" xml:space="preserve"><value>Open backup folder</value></data>
+  <data name="Settings_AutomaticBackup.Header" xml:space="preserve"><value>Back up automatically every week</value></data>
+  <data name="Backup_Last" xml:space="preserve"><value>Last backup: {0}</value></data>
+  <data name="Backup_None" xml:space="preserve"><value>No backup yet.</value></data>
+  <data name="Backup_Queued" xml:space="preserve"><value>The backup has started. Progress is shown in the processing queue.</value></data>
+  <data name="Restore_Title" xml:space="preserve"><value>Restore from this backup?</value></data>
+  <data name="Restore_Content" xml:space="preserve"><value>Recordings in {0} that are not in your Library are restored. Recordings already in your Library are left exactly as they are.</value></data>
+  <data name="Restore_Primary" xml:space="preserve"><value>Restore</value></data>
+  <data name="Restore_Queued" xml:space="preserve"><value>Restoring. Progress is shown in the processing queue.</value></data>
+  <data name="Stage_backup_create" xml:space="preserve"><value>Backup</value></data>
+  <data name="Stage_backup_restore" xml:space="preserve"><value>Restore</value></data>
+  <data name="Stage_audio_retain" xml:space="preserve"><value>Audio retention</value></data>
+  <data name="Settings_Maintenance.Text" xml:space="preserve"><value>Maintenance</value></data>
+  <data name="Maintenance_ClearCache.Content" xml:space="preserve"><value>Clear</value></data>
+  <data name="Maintenance_ClearCacheCard.Description" xml:space="preserve"><value>Deletes temporary files only. Recordings are not affected.</value></data>
+  <data name="Maintenance_ResetConfig.Content" xml:space="preserve"><value>Reset</value></data>
+  <data name="Maintenance_ResetConfigCard.Description" xml:space="preserve"><value>Restores default settings. Recordings and models are kept.</value></data>
+  <data name="Maintenance_FactoryReset.Content" xml:space="preserve"><value>Reset…</value></data>
+  <data name="Maintenance_FactoryResetCard.Description" xml:space="preserve"><value>Removes settings, index, processing history, models and cache, then restarts. Your Library is kept and re-indexed.</value></data>
+  <data name="Maintenance_Uninstall.Content" xml:space="preserve"><value>Uninstall…</value></data>
+  <data name="Maintenance_UninstallCard.Description" xml:space="preserve"><value>Choose what to keep, then continue in Windows Settings.</value></data>
+  <data name="Maintenance_CacheCleared" xml:space="preserve"><value>Cache cleared ({0} freed).</value></data>
+  <data name="Maintenance_ConfigReset" xml:space="preserve"><value>Settings were reset to their defaults.</value></data>
+  <data name="Maintenance_StopRecordingFirst" xml:space="preserve"><value>Stop the current recording first.</value></data>
+  <data name="Maintenance_UninstallProblems" xml:space="preserve"><value>Some data could not be removed: {0}. Close programs that use it and try again.</value></data>
+  <data name="ResetConfig_Title" xml:space="preserve"><value>Reset all settings?</value></data>
+  <data name="ResetConfig_Content" xml:space="preserve"><value>Settings return to their defaults. Recordings, transcripts, summaries and models are not changed.</value></data>
+  <data name="ResetConfig_Primary" xml:space="preserve"><value>Reset</value></data>
+  <data name="FactoryReset_Title" xml:space="preserve"><value>Reset Kakitome to its initial state?</value></data>
+  <data name="FactoryReset_Content" xml:space="preserve"><value>Settings, the search index, processing history, downloaded models and cache are removed and Kakitome restarts. Your Library ({0}) is kept and indexed again; models can be downloaded again.</value></data>
+  <data name="FactoryReset_Primary" xml:space="preserve"><value>Reset and restart</value></data>
+  <data name="Uninstall_Title" xml:space="preserve"><value>Uninstall Kakitome</value></data>
+  <data name="Uninstall_Intro" xml:space="preserve"><value>Your recordings are kept unless you choose otherwise. Selected items are moved to the Recycle Bin (models are deleted).</value></data>
+  <data name="Uninstall_RemoveLibrary" xml:space="preserve"><value>Also move my Library (recordings, transcripts, summaries — {0}) to the Recycle Bin</value></data>
+  <data name="Uninstall_RemoveModels" xml:space="preserve"><value>Remove downloaded models ({0})</value></data>
+  <data name="Uninstall_ModelsWithApp" xml:space="preserve"><value>Downloaded models ({0}) are removed with the app (they can be downloaded again)</value></data>
+  <data name="Uninstall_RemoveBackups" xml:space="preserve"><value>Also move backups ({0}) to the Recycle Bin</value></data>
+  <data name="Uninstall_AppState" xml:space="preserve"><value>Settings, index and cache ({0}) are removed with the app.</value></data>
+  <data name="Uninstall_Primary" xml:space="preserve"><value>Continue to uninstall</value></data>
+  <data name="Settings_Appearance.Text" xml:space="preserve"><value>Appearance</value></data>
+  <data name="Settings_Theme.Header" xml:space="preserve"><value>Theme</value></data>
+  <data name="Settings_UiLanguage.Header" xml:space="preserve"><value>Display language</value></data>
+  <data name="Settings_RestartRequired.Message" xml:space="preserve"><value>Restart Kakitome to apply the display language.</value></data>
+  <data name="Settings_Notifications.Header" xml:space="preserve"><value>Notify me when processing finishes or fails</value></data>
+  <data name="Settings_About.Text" xml:space="preserve"><value>About</value></data>
+  <data name="Settings_Releases.Content" xml:space="preserve"><value>Releases on GitHub</value></data>
+  <data name="Settings_Privacy.Text" xml:space="preserve"><value>Recordings, transcripts and summaries stay on this PC. Kakitome uses no cloud service. It contacts the internet only to download models and tools and, when turned on, to check GitHub for a newer version (only the version is asked for).</value></data>
+  <data name="Mode_Auto" xml:space="preserve"><value>Automatic (heavy work on AC power)</value></data>
+  <data name="Mode_AlwaysProcess" xml:space="preserve"><value>Always (also on battery)</value></data>
+  <data name="Mode_BatterySaver" xml:space="preserve"><value>Battery first (only on AC with a charged battery)</value></data>
+  <data name="Language_Auto" xml:space="preserve"><value>Detect automatically</value></data>
+  <data name="UiLanguage_System" xml:space="preserve"><value>Same as Windows</value></data>
+  <data name="Theme_System" xml:space="preserve"><value>Same as Windows</value></data>
+  <data name="Theme_Light" xml:space="preserve"><value>Light</value></data>
+  <data name="Theme_Dark" xml:space="preserve"><value>Dark</value></data>
+  <data name="AsrModel_Automatic" xml:space="preserve"><value>Automatic (best installed model for this PC)</value></data>
+  <data name="Model_Details" xml:space="preserve"><value>{0} · {1} · {2}</value></data>
+  <data name="ModelState_NotInstalled" xml:space="preserve"><value>Not installed</value></data>
+  <data name="ModelState_Installed" xml:space="preserve"><value>Installed</value></data>
+  <data name="ModelState_Invalid" xml:space="preserve"><value>Damaged — download again</value></data>
+  <data name="Model_Downloading" xml:space="preserve"><value>Downloading…</value></data>
+  <data name="Model_DownloadingPercent" xml:space="preserve"><value>Downloading… {0}%</value></data>
+  <data name="Model_InstallFailed" xml:space="preserve"><value>Download failed: {0}</value></data>
+  <data name="Model_Install.Content" xml:space="preserve"><value>Download</value></data>
+  <data name="Model_Remove.Content" xml:space="preserve"><value>Remove</value></data>
+  <data name="Model_Recommended.Text" xml:space="preserve"><value>Recommended for this PC</value></data>
+  <data name="ModelDialog_Title" xml:space="preserve"><value>Download this model?</value></data>
+  <data name="ModelDialog_Content" xml:space="preserve"><value>{0} ({1}) will be downloaded from {2}. License: {3}. It is verified before use, stored outside your Library, and can be removed at any time.</value></data>
+  <data name="ModelDialog_Primary" xml:space="preserve"><value>Download</value></data>
+  <data name="RemoveModelDialog_Title" xml:space="preserve"><value>Remove this model?</value></data>
+  <data name="RemoveModelDialog_Content" xml:space="preserve"><value>{0} will be deleted from this PC. Your recordings and transcripts are not affected.</value></data>
+  <data name="RemoveModelDialog_Primary" xml:space="preserve"><value>Remove</value></data>
+  <data name="Error_InvalidHotkey" xml:space="preserve"><value>Use Ctrl, Alt or Win with a letter, digit or F-key (for example Ctrl+Alt+Shift+R).</value></data>
+  <data name="Settings_Version" xml:space="preserve"><value>Version {0}</value></data>
+  <data name="SettingsTab_Recording.Text" xml:space="preserve"><value>Recording</value></data>
+  <data name="SettingsTab_Transcription.Text" xml:space="preserve"><value>Transcription &amp; summary</value></data>
+  <data name="SettingsTab_Models.Text" xml:space="preserve"><value>Models</value></data>
+  <data name="SettingsTab_Data.Text" xml:space="preserve"><value>Data &amp; backup</value></data>
+  <data name="SettingsTab_General.Text" xml:space="preserve"><value>General</value></data>
+  <data name="Settings_Advanced.Header" xml:space="preserve"><value>Advanced settings</value></data>
+  <data name="Settings_Hotkey.Description" xml:space="preserve"><value>Works while you use any app. Leave it empty to turn it off.</value></data>
+  <data name="Settings_SystemAudio.Description" xml:space="preserve"><value>Besides the microphone, records what the PC plays (for example the other side of an online meeting).</value></data>
+  <data name="Settings_LiveTranscript.Description" xml:space="preserve"><value>A preview using a model installed on this PC. The final transcript is made after recording.</value></data>
+  <data name="Settings_PreventSleep.Description" xml:space="preserve"><value>Keeps long recordings from stopping when the PC would go to sleep.</value></data>
+  <data name="Settings_KeepRecording.Description" xml:space="preserve"><value>Closing the window while recording keeps recording in the notification area.</value></data>
+  <data name="Settings_Retention.Description" xml:space="preserve"><value>Converting after processing saves disk space.</value></data>
+  <data name="Settings_Language.Description" xml:space="preserve"><value>Choose one if automatic detection gets it wrong.</value></data>
+  <data name="Settings_AutoProcess.Description" xml:space="preserve"><value>When off, start transcription from the recording's page.</value></data>
+  <data name="Settings_AsrModel.Description" xml:space="preserve"><value>Automatic is fine in most cases.</value></data>
+  <data name="Settings_SummaryEngine.Description" xml:space="preserve"><value>On a PC with 8 GB of memory, "Extraction only" is recommended.</value></data>
+  <data name="Settings_Mode.Description" xml:space="preserve"><value>Whether heavy work runs on battery power.</value></data>
+  <data name="Settings_YtDlpCustom.Text" xml:space="preserve"><value>Use a yt-dlp.exe you downloaded yourself</value></data>
+  <data name="Settings_LibraryFolder.Header" xml:space="preserve"><value>Library folder</value></data>
+  <data name="Settings_LibraryUsage.Header" xml:space="preserve"><value>Space used by the Library</value></data>
+  <data name="Settings_UsageDetails.Header" xml:space="preserve"><value>Space used by Kakitome</value></data>
+  <data name="Settings_AutomaticBackup.Description" xml:space="preserve"><value>Keeps the latest 3 backups.</value></data>
+  <data name="Settings_BackupFolder" xml:space="preserve"><value>Backup folder: {0}</value></data>
+  <data name="Settings_Troubleshoot.Header" xml:space="preserve"><value>Troubleshooting and uninstall</value></data>
+  <data name="Maintenance_ClearCacheCard.Header" xml:space="preserve"><value>Clear cache</value></data>
+  <data name="Maintenance_ResetConfigCard.Header" xml:space="preserve"><value>Reset settings</value></data>
+  <data name="Maintenance_FactoryResetCard.Header" xml:space="preserve"><value>Factory reset</value></data>
+  <data name="Maintenance_UninstallCard.Header" xml:space="preserve"><value>Uninstall Kakitome</value></data>
+  <data name="Settings_UiLanguage.Description" xml:space="preserve"><value>Takes effect after Kakitome restarts.</value></data>
+  <data name="Settings_NotificationsSection.Text" xml:space="preserve"><value>Notifications</value></data>
+  <data name="Settings_Notifications.Description" xml:space="preserve"><value>Shows a Windows notification while Kakitome is in the background.</value></data>
+  <data name="Queue_SectionActive.Text" xml:space="preserve"><value>In progress or needs attention</value></data>
+  <data name="Queue_SectionFinished.Text" xml:space="preserve"><value>Finished (last 7 days)</value></data>
+  <data name="Queue_GroupRunning" xml:space="preserve"><value>Processing ({0} of {1} steps done)</value></data>
+  <data name="Queue_GroupWaiting" xml:space="preserve"><value>Waiting ({0} of {1} steps done)</value></data>
+  <data name="Queue_GroupPaused" xml:space="preserve"><value>Paused</value></data>
+  <data name="Queue_GroupDone" xml:space="preserve"><value>Done ({0} steps)</value></data>
+  <data name="Queue_GroupFailed" xml:space="preserve"><value>A step failed — retry it below</value></data>
+  <data name="Settings_AutoDownload.Header" xml:space="preserve"><value>Download what is missing automatically</value></data>
+  <data name="Settings_AutoDownload.Description" xml:space="preserve"><value>At startup, downloads what is missing: the speech recognition model recommended for this PC, the recommended summary AI (PCs with 16 GB of memory or more) and yt-dlp for URL import. Not on a metered connection.</value></data>
+  <data name="Settings_AsrModels.Text" xml:space="preserve"><value>Speech recognition</value></data>
+  <data name="Settings_AsrModelsHint.Text" xml:space="preserve"><value>Turns recordings into text. One model is enough; with several, Kakitome picks the best one for this PC.</value></data>
+  <data name="Settings_SummaryModels.Text" xml:space="preserve"><value>Summary AI (optional)</value></data>
+  <data name="Settings_SummaryModelsHint.Text" xml:space="preserve"><value>Writes the summary text. Without one, the summary is made by picking out the key sentences of the transcript.</value></data>
+  <data name="Settings_Tools.Text" xml:space="preserve"><value>Tools</value></data>
+  <data name="Settings_ToolsHint.Text" xml:space="preserve"><value>Programs Kakitome uses for some features.</value></data>
+  <data name="ModelNote_whisper-large-v3-turbo-q5_0" xml:space="preserve"><value>Most accurate. For PCs with a GPU (fast on the GPU, slow on the CPU alone).</value></data>
+  <data name="ModelNote_whisper-small-q5_1" xml:space="preserve"><value>For PCs without a GPU. Light and fast on the CPU, fairly robust to noise.</value></data>
+  <data name="ModelNote_reazonspeech-k2-v2-int8" xml:space="preserve"><value>Japanese only and very light (CPU). Good in quiet places; weak with noise.</value></data>
+  <data name="ModelNote_qwen3-4b-instruct-2507-q4_k_m" xml:space="preserve"><value>Most accurate summaries. For PCs with 16 GB of memory or more; faster with a GPU.</value></data>
+  <data name="ModelNote_phi-4-mini-instruct-q4_k_m" xml:space="preserve"><value>An alternative summary model, less accurate than Qwen3. For PCs with 16 GB of memory or more.</value></data>
+  <data name="Stage_diarize" xml:space="preserve"><value>Speaker identification</value></data>
+  <data name="JobError_NoAsrModel" xml:space="preserve"><value>No speech recognition model is installed yet. This is retried automatically when the model is ready (Settings › Models).</value></data>
+  <data name="JobError_EditedOutside" xml:space="preserve"><value>{0} was edited outside Kakitome, so it was not overwritten.</value></data>
+  <data name="JobError_AudioUnreadable" xml:space="preserve"><value>The audio could not be read: {0}</value></data>
+  <data name="JobError_NoTranscript" xml:space="preserve"><value>There is no transcript yet.</value></data>
+  <data name="JobError_SourceMissing" xml:space="preserve"><value>The original file is no longer there.</value></data>
+  <data name="JobError_BadUrl" xml:space="preserve"><value>The URL is not valid.</value></data>
+  <data name="JobError_NoYtDlp" xml:space="preserve"><value>URL import needs yt-dlp. Install it in Settings › Models.</value></data>
+  <data name="JobError_UnsupportedMedia" xml:space="preserve"><value>The downloaded file ({0}) is not a supported format.</value></data>
+  <data name="JobError_YtDlpFailed" xml:space="preserve"><value>yt-dlp could not download the media.</value></data>
+  <data name="JobError_DownloadFailed" xml:space="preserve"><value>Download of {0} failed: {1}</value></data>
+  <data name="JobError_NoEncoder" xml:space="preserve"><value>No audio encoder is available on this PC.</value></data>
+  <data name="JobError_RetentionCheck" xml:space="preserve"><value>The converted audio did not match the recording, so the original was kept.</value></data>
+  <data name="JobError_BackupWrite" xml:space="preserve"><value>The backup could not be written: {0}</value></data>
+  <data name="JobError_BackupMissing" xml:space="preserve"><value>The backup file is no longer there.</value></data>
+  <data name="JobError_NoSummary" xml:space="preserve"><value>No summary engine is available.</value></data>
+  <data name="JobError_UnknownKind" xml:space="preserve"><value>This version of Kakitome cannot run this step ({0}).</value></data>
+  <data name="Settings_CheckForUpdates.Header" xml:space="preserve"><value>Check for updates</value></data>
+  <data name="Settings_CheckForUpdates.Description" xml:space="preserve"><value>Once a day, asks GitHub whether a newer version is out and tells you. Nothing is downloaded or sent besides the request.</value></data>
+  <data name="Settings_CheckUpdatesNow.Content" xml:space="preserve"><value>Check now</value></data>
+  <data name="Update_Checking" xml:space="preserve"><value>Checking…</value></data>
+  <data name="Update_Available" xml:space="preserve"><value>Kakitome {0} is available (you have {1}).</value></data>
+  <data name="Update_UpToDate" xml:space="preserve"><value>You have the latest version ({0}).</value></data>
+  <data name="Update_Failed" xml:space="preserve"><value>Could not check for updates. Check the internet connection.</value></data>
+  <data name="Home_Update.Title" xml:space="preserve"><value>New version</value></data>
+  <data name="Update_Open.Content" xml:space="preserve"><value>Download page</value></data>
+  <data name="Notify_Update" xml:space="preserve"><value>A new version of Kakitome is available</value></data>
+  <data name="Diagnostics_Card.Header" xml:space="preserve"><value>Report a problem</value></data>
+  <data name="Diagnostics_Card.Description" xml:space="preserve"><value>Saves one zip with the logs, this PC, settings and the processing history to attach to a GitHub issue. No audio, transcripts, summaries or titles; your user and folder names are hidden. Project and file names can appear in logs.</value></data>
+  <data name="Diagnostics_Export.Content" xml:space="preserve"><value>Save diagnostics…</value></data>
+  <data name="Diagnostics_OpenLogs.Content" xml:space="preserve"><value>Open log folder</value></data>
+  <data name="Diagnostics_Saved" xml:space="preserve"><value>Diagnostics saved. Attach the zip to the issue.</value></data>
+  <data name="Diagnostics_Failed" xml:space="preserve"><value>Diagnostics could not be saved: {0}</value></data>
+</root>

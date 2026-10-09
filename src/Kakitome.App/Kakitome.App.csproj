@@ -1,0 +1,96 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>$(KakitomeWindowsTfm)</TargetFramework>
+    <TargetPlatformMinVersion>$(KakitomeWindowsMinVersion)</TargetPlatformMinVersion>
+    <SupportedOSPlatformVersion>$(KakitomeWindowsMinVersion)</SupportedOSPlatformVersion>
+    <RootNamespace>Kakitome.App</RootNamespace>
+    <AssemblyName>Kakitome</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\Kakitome.ico</ApplicationIcon>
+    <Platforms>x64;ARM64</Platforms>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <UseWinUI>true</UseWinUI>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsPackageType Condition="'$(KakitomeUnpackaged)' == 'true'">None</WindowsPackageType>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <!-- Program.cs provides Main for single-instance activation. -->
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- Generated XAML code-behind is not held to the analyzer warning bar. -->
+    <NoWarn>$(NoWarn);CA1515;CA1852</NoWarn>
+  </PropertyGroup>
+
+  <!-- Default to x64 when built from the CLI without an explicit platform. -->
+  <PropertyGroup Condition="'$(Platform)' == '' or '$(Platform)' == 'AnyCPU'">
+    <Platform>x64</Platform>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PlatformTarget>$(Platform)</PlatformTarget>
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' and '$(Platform)' == 'x64'">win-x64</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' and '$(Platform)' == 'ARM64'">win-arm64</RuntimeIdentifier>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Manifest Include="$(ApplicationManifest)" />
+    <!-- Copied to the output so the unpackaged (MSI) build ships them: the window and tray icons load these files. -->
+    <Content Include="Assets\**\*.png" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Assets\*.ico" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Third-party notices ship with the app (docs/10) and are shown in Settings > About. -->
+    <Content Include="..\..\THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="..\..\licenses\*.txt" Link="licenses\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectCapability Include="Msix" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Kakitome.Application\Kakitome.Application.csproj" />
+    <ProjectReference Include="..\Kakitome.Presentation\Kakitome.Presentation.csproj" />
+    <ProjectReference Include="..\Kakitome.Infrastructure\Kakitome.Infrastructure.csproj" />
+  </ItemGroup>
+  <!--
+    Whisper.net and LLamaSharp add Linux/macOS libraries unconditionally, and Whisper's Vulkan build exists only for x64.
+    Keep the package to what Windows on this architecture can load (ADR-026).
+  -->
+  <Target Name="KakitomeTrimNativeRuntimes" AfterTargets="GetCopyToOutputDirectoryItems">
+    <ItemGroup>
+      <_KakitomeDrop Include="@(AllItemsFullPathWithTargetPath)" Condition="$([System.String]::Copy('%(AllItemsFullPathWithTargetPath.TargetPath)').Contains('linux-')) or $([System.String]::Copy('%(AllItemsFullPathWithTargetPath.TargetPath)').Contains('osx-'))" />
+      <_KakitomeDrop Include="@(AllItemsFullPathWithTargetPath)" Condition="'$(Platform)' == 'ARM64' and $([System.String]::Copy('%(AllItemsFullPathWithTargetPath.TargetPath)').Contains('runtimes/vulkan/win-x64'))" />
+      <_KakitomeDrop Include="@(AllItemsFullPathWithTargetPath)" Condition="$([System.String]::Copy('%(AllItemsFullPathWithTargetPath.TargetPath)').Contains('win-x86'))" />
+      <_KakitomeDrop Include="@(AllItemsFullPathWithTargetPath)" Condition="'$(Platform)' == 'x64' and $([System.String]::Copy('%(AllItemsFullPathWithTargetPath.TargetPath)').Contains('win-arm64'))" />
+      <_KakitomeDrop Include="@(AllItemsFullPathWithTargetPath)" Condition="'$(Platform)' == 'ARM64' and $([System.String]::Copy('%(AllItemsFullPathWithTargetPath.TargetPath)').Contains('win-x64'))" />
+      <AllItemsFullPathWithTargetPath Remove="@(_KakitomeDrop)" />
+      <AllItemsFullPathWithTargetPath Update="@(AllItemsFullPathWithTargetPath)" TargetPath="$([System.String]::Copy('%(AllItemsFullPathWithTargetPath.TargetPath)').Replace('$(_KakitomeDoubleSep)', '$(_KakitomeSep)'))" />
+      <_TransitiveItemsToCopyToOutputDirectory Remove="@(_KakitomeDrop)" />
+      <_SourceItemsToCopyToOutputDirectory Remove="@(_KakitomeDrop)" />
+      <_SourceItemsToCopyToOutputDirectoryAlways Remove="@(_KakitomeDrop)" />
+    </ItemGroup>
+  </Target>
+  <PropertyGroup>
+    <_KakitomeSep>$([System.IO.Path]::DirectorySeparatorChar)</_KakitomeSep>
+    <_KakitomeDoubleSep>$(_KakitomeSep)$(_KakitomeSep)</_KakitomeDoubleSep>
+  </PropertyGroup>
+  <Target Name="KakitomeTrimNativeRuntimesFromPublish" AfterTargets="ComputeResolvedFilesToPublishList">
+    <ItemGroup>
+      <_KakitomePublishDrop Include="@(ResolvedFileToPublish)" Condition="$([System.String]::Copy('%(ResolvedFileToPublish.RelativePath)').Contains('linux-')) or $([System.String]::Copy('%(ResolvedFileToPublish.RelativePath)').Contains('osx-'))" />
+      <_KakitomePublishDrop Include="@(ResolvedFileToPublish)" Condition="'$(Platform)' == 'ARM64' and $([System.String]::Copy('%(ResolvedFileToPublish.RelativePath)').Contains('vulkan')) and $([System.String]::Copy('%(ResolvedFileToPublish.RelativePath)').Contains('win-x64'))" />
+      <!-- Whisper.net's CPU runtimes for other architectures (it loads runtimes\<this architecture>\). -->
+      <_KakitomePublishDrop Include="@(ResolvedFileToPublish)" Condition="$([System.String]::Copy('%(ResolvedFileToPublish.RelativePath)').Contains('win-x86'))" />
+      <_KakitomePublishDrop Include="@(ResolvedFileToPublish)" Condition="'$(Platform)' == 'x64' and $([System.String]::Copy('%(ResolvedFileToPublish.RelativePath)').Contains('win-arm64'))" />
+      <_KakitomePublishDrop Include="@(ResolvedFileToPublish)" Condition="'$(Platform)' == 'ARM64' and $([System.String]::Copy('%(ResolvedFileToPublish.RelativePath)').Contains('win-x64'))" />
+      <ResolvedFileToPublish Remove="@(_KakitomePublishDrop)" />
+      <!-- LLamaSharp's targets produce "runtimes\win-x64
+ative\…" (doubled separator), which MakeAppx rejects. -->
+      <ResolvedFileToPublish Update="@(ResolvedFileToPublish)" RelativePath="$([System.String]::Copy('%(ResolvedFileToPublish.RelativePath)').Replace('$(_KakitomeDoubleSep)', '$(_KakitomeSep)'))" />
+    </ItemGroup>
+  </Target>
+</Project>
