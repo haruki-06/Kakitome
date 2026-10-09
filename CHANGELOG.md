@@ -3,6 +3,13 @@
 All notable changes to Kakitome (named SmartRec before 2.0.0) are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/).
 
+## [2.0.2] - 2026-10-09
+
+### Fixed
+
+- Whisper repeated a mistaken word for the rest of a recording (「黒玉:」 in front of almost every line): recognized text
+  is no longer fed back as the prompt, and script-style labels Whisper invents are removed in cleanup (ADR-043).
+
 ## [2.0.1] - 2026-10-09
 
 ### Fixed

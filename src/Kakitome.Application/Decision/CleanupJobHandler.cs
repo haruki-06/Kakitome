@@ -37,6 +37,7 @@ public sealed class CleanupJobHandler(LibraryService library, IDecisionEngine en
         var glossary = await glossaries.LoadForProjectAsync(metadata.Project, cancellationToken).ConfigureAwait(false);
         var now = time.GetLocalNow();
         var suggestions = new List<EditSuggestion>();
+        var labels = InventedLabels.Find(transcript.Segments.Where(s => !s.Edited).Select(s => s.RawText ?? s.Text), transcript.Language);
         var changed = 0;
         var corrected = 0;
         foreach (var segment in transcript.Segments)
@@ -51,7 +52,9 @@ public sealed class CleanupJobHandler(LibraryService library, IDecisionEngine en
             }
 
             var original = segment.RawText ?? segment.Text;
-            var candidates = engine.FindEditCandidates(original, transcript.Language);
+            var candidates = engine.FindEditCandidates(original, transcript.Language)
+                .Concat(InventedLabels.Candidates(original, labels))
+                .ToList();
             var cleaned = Apply(original, candidates.Where(c => c.Risk == EditRisk.Low));
             var withGlossary = glossary.Apply(cleaned);
             if (!string.Equals(withGlossary, cleaned, StringComparison.Ordinal))
@@ -109,17 +112,26 @@ public sealed class CleanupJobHandler(LibraryService library, IDecisionEngine en
         await context.SetEngineAsync($"Kakitome {engine.Id} (local)").ConfigureAwait(false);
     }
 
-    /// <summary>Applies non-overlapping edits from the end so earlier indices stay valid.</summary>
+    /// <summary>
+    /// Applies edits from the end so earlier indices stay valid. Overlapping edits (rules run independently) keep the one
+    /// that starts first, the longer one on a tie.
+    /// </summary>
     internal static string Apply(string text, IEnumerable<EditCandidate> edits)
     {
-        var result = text;
-        foreach (var e in edits.OrderByDescending(e => e.Start))
+        var kept = new List<EditCandidate>();
+        var end = 0;
+        foreach (var e in edits.Where(e => e.Start >= 0 && e.Start + e.Length <= text.Length).OrderBy(e => e.Start).ThenByDescending(e => e.Length))
         {
-            if (e.Start < 0 || e.Start + e.Length > result.Length)
+            if (e.Start >= end)
             {
-                continue;
+                kept.Add(e);
+                end = e.Start + e.Length;
             }
+        }
 
+        var result = text;
+        foreach (var e in Enumerable.Reverse(kept))
+        {
             result = string.Concat(result.AsSpan(0, e.Start), e.Replacement, result.AsSpan(e.Start + e.Length));
         }
 

@@ -107,9 +107,8 @@ public sealed class AsrPipelineTests
         Assert.Contains("[00:00:00] 発話1", md, StringComparison.Ordinal);
         Assert.Equal("ja", (await f.Library.GetMetadataAsync(id)).Language);
 
-        // Previous text is offered as context for the next chunk; the first gets a punctuated Japanese opening.
-        Assert.Equal(AsrPromptBuilder.JapaneseStyleSeed, asr.Prompts[0]);
-        Assert.Equal("発話1", asr.Prompts[1]);
+        // Every chunk gets the punctuated Japanese opening; recognized text is never fed back (ADR-043).
+        Assert.All(asr.Prompts, p => Assert.Equal(AsrPromptBuilder.JapaneseStyleSeed, p));
     }
 
     [Fact]

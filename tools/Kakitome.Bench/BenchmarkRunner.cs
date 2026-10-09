@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Win32;
@@ -90,23 +90,22 @@ internal static class BenchmarkRunner
         }
     }
 
-    /// <summary>The product path: WAV reader → 16 kHz resampler → VAD chunker → provider.</summary>
+    /// <summary>The product path: WAV reader → 16 kHz resampler → VAD chunker → product prompt (no glossary) → provider.</summary>
     private static async Task<string> TranscribeFileAsync(IAsrSession session, string path, string language)
     {
-        _ = language; // language is fixed per session in the product; kept for future per-item hints
         var text = new StringBuilder();
         using var reader = new WavSampleReader(path);
-        string? prompt = null;
+        var prompts = new AsrPromptBuilder(Kakitome.Domain.Transcripts.Glossary.Empty, language);
         foreach (var chunk in SpeechChunker.Split(reader))
         {
-            var result = await session.TranscribeAsync(chunk.Samples, prompt);
+            var result = await session.TranscribeAsync(chunk.Samples, prompts.Next(text.ToString()));
             foreach (var segment in result.Segments)
             {
                 text.Append(segment.Text);
                 text.Append(language == "en" ? " " : string.Empty);
             }
 
-            prompt = text.Length > 200 ? text.ToString(text.Length - 200, 200) : text.ToString();
+            prompts.Observe(text.ToString());
         }
 
         return text.ToString().Trim();

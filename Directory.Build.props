@@ -11,7 +11,7 @@
     <Product>Kakitome</Product>
     <Copyright>Copyright (c) 2026 Kakitome</Copyright>
     <!-- Single source of truth for the app version (MSIX version is derived: Major.Minor.Build.0). -->
-    <VersionPrefix>2.0.1</VersionPrefix>
+    <VersionPrefix>2.0.2</VersionPrefix>
     <!-- Pre-release label (empty for Stable). -->
     <VersionSuffix></VersionSuffix>
     <SatelliteResourceLanguages>en;ja</SatelliteResourceLanguages>

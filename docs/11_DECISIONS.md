@@ -565,3 +565,18 @@ Extends (does not change) the canonical Library contract in `docs/05`:
   metadata.json with no job (failed/cancelled steps are left alone). (2) Diagnostics now include Windows' own crash and
   hang records for Kakitome.exe (Application Error 1000, Application Hang 1002, .NET Runtime 1026, WER 1001), which name
   the faulting module of a native crash. (3) yt-dlp "HTTP Error 403" is retried as transient (YouTube media requests).
+
+## ADR-043 — Recognized text is no longer fed back into the Whisper prompt (user report, 2026-10-09)
+
+- Context: in a 57-minute variety video Whisper wrote 「黒玉:」 once (a word from the video, formatted like a
+  speaker label) and then put it in front of almost every line for the rest of the recording (327 times). The end of
+  the recognized text was part of every chunk's prompt (ADR-030), and Whisper copies its prompt — a self-reinforcing
+  loop. ADR-030 had already seen the same mechanism carry unpunctuated style forward.
+- Decision: `AsrPromptBuilder` puts only glossary hints in the prompt, or for Japanese without hints the punctuated
+  opening on every chunk; the recognized text still picks the topic's glossary terms. Independently, Whisper invents
+  script-style labels inside a single chunk on video audio (「松田:」 17 times without any prompt): cleanup removes a
+  Japanese "word:" label that appears at least 3 times at line/sentence starts, wherever it occurs (`InventedLabels`,
+  low risk, original kept in rawText). Overlapping cleanup edits now keep the earliest instead of corrupting text.
+- Measured (first 22 min of the video, large-v3-turbo, GPU): 「黒玉」 323 → 2, 「。」 123 → 529, 87 s → 51 s. Synthetic
+  corpus (product prompt now also used by `Kakitome.Bench run`): ja CER clean 4.1 → 4.2 %, 15 dB 4.9 → 4.7 %, 5 dB
+  5.0 → 4.7 %. The lecture behind ADR-030 is not on this PC; glossary hints, which carried its gains, are unchanged.

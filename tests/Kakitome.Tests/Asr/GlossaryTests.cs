@@ -87,24 +87,22 @@ public sealed class GlossaryTests
     }
 
     [Fact]
-    public void Prompt_puts_hints_before_recent_text_within_budget()
+    public void The_prompt_is_the_hints_and_never_the_recognized_text()
     {
         var builder = new AsrPromptBuilder(Glossary.Parse("堀木訴訟\n朝日訴訟"), "ja");
 
         Assert.Equal("堀木訴訟、朝日訴訟。", builder.Next(null));
-        var prompt = builder.Next(new string('あ', 300));
-        Assert.StartsWith("堀木訴訟、朝日訴訟。", prompt, StringComparison.Ordinal);
-        Assert.True(prompt!.Length <= "堀木訴訟、朝日訴訟。".Length + 90);
+        Assert.Equal("堀木訴訟、朝日訴訟。", builder.Next("黒玉:思ったより多い! 黒玉:戻そう")); // a mistake is not carried on
     }
 
     [Fact]
-    public void Without_a_glossary_the_prompt_is_the_recent_text()
+    public void Without_a_glossary_Japanese_gets_the_punctuated_opening_every_time()
     {
         var builder = new AsrPromptBuilder(Glossary.Empty, "ja");
 
-        Assert.Equal(AsrPromptBuilder.JapaneseStyleSeed, builder.Next(null)); // punctuation style for the first chunk
-        Assert.Equal("前の文。", builder.Next("前の文。"));
-        Assert.Null(new AsrPromptBuilder(Glossary.Empty, "en").Next(null));
+        Assert.Equal(AsrPromptBuilder.JapaneseStyleSeed, builder.Next(null));
+        Assert.Equal(AsrPromptBuilder.JapaneseStyleSeed, builder.Next("前の文。"));
+        Assert.Null(new AsrPromptBuilder(Glossary.Empty, "en").Next("previous text"));
     }
 
     [Fact]

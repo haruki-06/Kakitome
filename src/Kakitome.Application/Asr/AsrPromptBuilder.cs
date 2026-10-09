@@ -4,9 +4,11 @@ using Kakitome.Domain.Transcripts;
 namespace Kakitome.Application.Asr;
 
 /// <summary>
-/// Builds the context prompt for each ASR chunk (ADR-030): glossary terms as a short punctuated list, followed by the
-/// end of the text recognized so far. Whisper only reads about 224 prompt tokens, so both parts are budgeted. When the
-/// glossary is larger than the budget, terms are chosen by the current topic: first terms recognized in the last few
+/// Builds the prompt for each ASR chunk (ADR-030, ADR-043): glossary terms as a short punctuated list, or for Japanese
+/// without a glossary a neutral punctuated opening. The text recognized so far only steers which terms are offered;
+/// it is not put into the prompt any more — Whisper copies its prompt, so one mistake there (a 「黒玉:」 label on a
+/// video) was repeated in almost every line for the rest of the recording. When the glossary is larger than the
+/// budget, terms are chosen by the current topic: first terms recognized in the last few
 /// minutes, then terms that share distinctive character pairs with the recent text (a lecture that reaches
 /// 「教科書検定」 brings 「家永教科書訴訟」 forward), and the rest take turns, so every term is offered over a long
 /// recording.
@@ -17,14 +19,13 @@ public sealed class AsrPromptBuilder
     private const int RecentChunks = 8;
 
     /// <summary>
-    /// A neutral punctuated opening for Japanese when there is nothing else to say. Whisper copies the style of its
+    /// A neutral punctuated opening for Japanese when there are no glossary terms. Whisper copies the style of its
     /// prompt; without one, long Japanese speech often comes out with no 「。」「、」 at all (ADR-030 benchmark).
     /// </summary>
     internal const string JapaneseStyleSeed = "はい。では、始めます。";
 
     private readonly Glossary _glossary;
     private readonly int _hintBudget;
-    private readonly int _contextBudget;
     private readonly string _separator;
     private readonly string _terminator;
     private readonly bool _japanese;
@@ -40,7 +41,6 @@ public sealed class AsrPromptBuilder
 
         // Japanese is roughly one token per character, English roughly four characters per token.
         _hintBudget = cjk ? 110 : 400;
-        _contextBudget = cjk ? 90 : 300;
         _separator = cjk ? "、" : ", ";
         _terminator = cjk ? "。" : ".";
         _japanese = language is null || language.StartsWith("ja", StringComparison.OrdinalIgnoreCase);
@@ -58,27 +58,16 @@ public sealed class AsrPromptBuilder
     }
 
     /// <summary>Prompt for the next chunk; null when there is nothing to say.</summary>
+    /// <param name="previousText">The text recognized so far: picks the glossary terms of the current topic only.</param>
     public string? Next(string? previousText)
     {
-        var sb = new StringBuilder();
         var hints = SelectTerms(previousText);
         if (hints.Count > 0)
         {
-            sb.Append(string.Join(_separator, hints)).Append(_terminator);
+            return new StringBuilder().Append(string.Join(_separator, hints)).Append(_terminator).ToString();
         }
 
-        if (!string.IsNullOrWhiteSpace(previousText))
-        {
-            var context = previousText.Trim();
-            sb.Append(context.Length > _contextBudget ? context[^_contextBudget..] : context);
-        }
-
-        if (sb.Length == 0)
-        {
-            return _japanese ? JapaneseStyleSeed : null;
-        }
-
-        return sb.ToString();
+        return _japanese ? JapaneseStyleSeed : null;
     }
 
     /// <summary>Records which terms the last chunk contained (after corrections) and moves to the next chunk.</summary>
