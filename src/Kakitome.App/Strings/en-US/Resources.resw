@@ -146,8 +146,8 @@
   <data name="Wait_Dependency" xml:space="preserve"><value>Waiting for the previous step</value></data>
   <data name="Wait_RetryBackoff" xml:space="preserve"><value>Will retry shortly</value></data>
   <data name="Wait_OnBattery" xml:space="preserve"><value>Waiting for AC power to save battery</value></data>
-  <data name="Wait_EnergySaver" xml:space="preserve"><value>Waiting while Energy Saver is on</value></data>
-  <data name="Wait_LowBattery" xml:space="preserve"><value>Waiting: battery is low</value></data>
+  <data name="Wait_EnergySaver" xml:space="preserve"><value>Waiting while Windows Energy Saver is on</value></data>
+  <data name="Wait_LowBattery" xml:space="preserve"><value>Waiting: battery is low. Processing continues on AC power.</value></data>
   <data name="Wait_SystemBusy" xml:space="preserve"><value>Waiting until the PC is less busy</value></data>
   <data name="Wait_LowMemory" xml:space="preserve"><value>Waiting for free memory</value></data>
   <data name="Wait_LowDiskSpace" xml:space="preserve"><value>Paused: the disk is almost full</value></data>
@@ -380,7 +380,7 @@ Please write a glossary for this subject that I can also use for future recordin
   <data name="Settings_About.Text" xml:space="preserve"><value>About</value></data>
   <data name="Settings_Releases.Content" xml:space="preserve"><value>Releases on GitHub</value></data>
   <data name="Settings_Privacy.Text" xml:space="preserve"><value>Recordings, transcripts and summaries stay on this PC. Kakitome uses no cloud service. It contacts the internet only to download models and tools and, when turned on, to check GitHub for a newer version (only the version is asked for).</value></data>
-  <data name="Mode_Auto" xml:space="preserve"><value>Automatic (heavy work on AC power)</value></data>
+  <data name="Mode_Auto" xml:space="preserve"><value>Automatic (on battery: slower, pauses below 30 %)</value></data>
   <data name="Mode_AlwaysProcess" xml:space="preserve"><value>Always (also on battery)</value></data>
   <data name="Mode_BatterySaver" xml:space="preserve"><value>Battery first (only on AC with a charged battery)</value></data>
   <data name="Language_Auto" xml:space="preserve"><value>Detect automatically</value></data>
@@ -491,4 +491,5 @@ Please write a glossary for this subject that I can also use for future recordin
   <data name="Diagnostics_OpenLogs.Content" xml:space="preserve"><value>Open log folder</value></data>
   <data name="Diagnostics_Saved" xml:space="preserve"><value>Diagnostics saved. Attach the zip to the issue.</value></data>
   <data name="Diagnostics_Failed" xml:space="preserve"><value>Diagnostics could not be saved: {0}</value></data>
+  <data name="Home_ProcessingWaiting" xml:space="preserve"><value>{0} waiting — {1}</value></data>
 </root>

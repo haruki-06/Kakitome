@@ -42,9 +42,11 @@ public sealed partial class ProcessingPipeline
     }
 
     /// <summary>Queues all available stages for a recording. Returns the pipeline id, or null if nothing to run.</summary>
-    public async Task<Guid?> EnqueueAsync(RecordingId id, int priority = 0, CancellationToken cancellationToken = default)
+    public Task<Guid?> EnqueueAsync(RecordingId id, int priority = 0, CancellationToken cancellationToken = default) =>
+        EnqueueStagesAsync(id, [.. StageOrder.Where(_scheduler.HasHandler)], priority, cancellationToken);
+
+    private async Task<Guid?> EnqueueStagesAsync(RecordingId id, List<string> stages, int priority, CancellationToken cancellationToken)
     {
-        var stages = StageOrder.Where(_scheduler.HasHandler).ToList();
         if (stages.Count == 0)
         {
             return null;
@@ -85,7 +87,9 @@ public sealed partial class ProcessingPipeline
 
     /// <summary>
     /// Startup catch-up: recordings that finished (or were recovered after a crash) but were never queued — e.g. the
-    /// app closed right after Stop — get their pipeline now.
+    /// app closed right after Stop — get their pipeline now; and a pipeline cut short while it was being queued (the
+    /// app ended after the first stage's job was created: steps still "pending" in metadata.json with no job, seen in a
+    /// field test) is queued again from the first such step. Failed, cancelled and finished steps are left alone.
     /// </summary>
     public async Task<int> EnsureQueuedAsync(CancellationToken cancellationToken = default)
     {
@@ -94,23 +98,56 @@ public sealed partial class ProcessingPipeline
             return 0;
         }
 
-        var withJobs = (await _jobs.ListAsync(cancellationToken: cancellationToken).ConfigureAwait(false))
+        var jobsByRecording = (await _jobs.ListAsync(cancellationToken: cancellationToken).ConfigureAwait(false))
             .Where(j => j.RecordingId is not null)
-            .Select(j => j.RecordingId!.Value)
-            .ToHashSet();
+            .GroupBy(j => j.RecordingId!.Value)
+            .ToDictionary(g => g.Key, g => g.ToList());
 
         var queued = 0;
         foreach (var entry in await _library.ListRecordingsAsync(cancellationToken).ConfigureAwait(false))
         {
-            if (withJobs.Contains(entry.Id) || entry.CaptureStatus is CaptureStatus.InProgress or CaptureStatus.Cancelled || !entry.HasAudio)
+            if (entry.CaptureStatus is CaptureStatus.InProgress or CaptureStatus.Cancelled || !entry.HasAudio)
             {
                 continue;
             }
 
-            var metadata = await _library.GetMetadataAsync(entry.Id, cancellationToken).ConfigureAwait(false);
-            if (metadata.Processing.Count == 0)
+            var jobs = jobsByRecording.GetValueOrDefault(entry.Id) ?? [];
+            if (jobs.Any(j => !j.IsTerminal))
             {
-                await EnqueueAsync(entry.Id, cancellationToken: cancellationToken).ConfigureAwait(false);
+                continue; // still being processed
+            }
+
+            var metadata = await _library.GetMetadataAsync(entry.Id, cancellationToken).ConfigureAwait(false);
+            var stages = StageOrder.Where(_scheduler.HasHandler).ToList();
+            List<string> remaining;
+            if (metadata.Processing.Count == 0 && !jobs.Any(j => StageOrder.Contains(j.Kind)))
+            {
+                remaining = stages;
+            }
+            else
+            {
+                remaining = [];
+                foreach (var stage in stages)
+                {
+                    var step = metadata.Processing.FirstOrDefault(p => p.Stage == stage);
+                    var latest = jobs.Where(j => j.Kind == stage).MaxBy(j => j.CreatedAt);
+                    if (step?.Status == ProcessingStepStatus.Succeeded || latest?.State == JobState.Succeeded)
+                    {
+                        continue;
+                    }
+
+                    if (step?.Status == ProcessingStepStatus.Pending && latest is null)
+                    {
+                        remaining = stages[stages.IndexOf(stage)..];
+                    }
+
+                    break;
+                }
+            }
+
+            if (remaining.Count > 0)
+            {
+                await EnqueueStagesAsync(entry.Id, remaining, 0, cancellationToken).ConfigureAwait(false);
                 queued++;
             }
         }

@@ -49,6 +49,12 @@ public static class ResourcePolicy
     public const int CriticalBatteryPercent = 15;
     public const int BatterySaverMinPercent = 50;
 
+    /// <summary>
+    /// Auto on battery: heavy work continues with a reduced budget down to this charge, then waits for AC (docs/06
+    /// "defer/reduce"). Waiting for AC from the first percent left laptops with nothing transcribed (field test).
+    /// </summary>
+    public const int AutoBatteryMinPercent = 30;
+
     public static JobWaitReason Evaluate(JobResourceClass resourceClass, ResourceSnapshot s, ProcessingMode mode)
     {
         ArgumentNullException.ThrowIfNull(s);
@@ -78,9 +84,9 @@ public static class ResourcePolicy
         switch (mode)
         {
             case ProcessingMode.Auto:
-                if (onBattery)
+                if (onBattery && s.BatteryPercent is { } charge && charge < AutoBatteryMinPercent)
                 {
-                    return JobWaitReason.OnBattery;
+                    return JobWaitReason.LowBattery;
                 }
 
                 if (s.EnergySaverOn)

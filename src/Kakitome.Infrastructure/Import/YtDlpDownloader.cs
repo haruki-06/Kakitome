@@ -219,7 +219,8 @@ public sealed partial class YtDlpDownloader(ISettingsStore settings, IModelStore
         || error.Contains("Sign in", StringComparison.OrdinalIgnoreCase)
         || error.Contains("Requested format is not available", StringComparison.OrdinalIgnoreCase)
         || error.Contains("HTTP Error 404", StringComparison.OrdinalIgnoreCase)
-        || error.Contains("HTTP Error 403", StringComparison.OrdinalIgnoreCase)
+        // HTTP 403 is not here: YouTube answers 403 to media requests now and then and the same URL works moments
+        // later (seen in a field test), so it is retried like other transient errors.
         || error.Contains("DRM", StringComparison.Ordinal);
 
     /// <summary>The managed install wins; otherwise a user-selected executable (validated, never searched on PATH).</summary>

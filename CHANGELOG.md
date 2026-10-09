@@ -3,6 +3,15 @@
 All notable changes to Kakitome (named SmartRec before 2.0.0) are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and versions follow [Semantic Versioning](https://semver.org/).
 
+## [2.0.1] - 2026-10-09
+
+### Fixed
+
+- Auto processing mode no longer waits for AC power from the first percent on battery: heavy work continues with a
+  reduced budget down to 30 % and Home says why work waits (ADR-042).
+- A pipeline cut short by a crash while it was being queued is completed at the next start (transcription never ran).
+- Diagnostics include Windows' crash and hang records for Kakitome; YouTube "HTTP 403" downloads are retried.
+
 ## [2.0.0] - 2026-10-09
 
 ### Changed

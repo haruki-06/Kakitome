@@ -8,7 +8,7 @@ public sealed class ResourcePolicyTests
     private static readonly ResourceSnapshot Battery = Ac with { OnAcPower = false };
 
     [Theory]
-    [InlineData(ProcessingMode.Auto, JobWaitReason.OnBattery)]
+    [InlineData(ProcessingMode.Auto, JobWaitReason.None)] // reduced budget, see Budget_…
     [InlineData(ProcessingMode.BatterySaver, JobWaitReason.OnBattery)]
     [InlineData(ProcessingMode.AlwaysProcess, JobWaitReason.None)]
     public void Heavy_work_on_battery_depends_on_mode(ProcessingMode mode, JobWaitReason expected) =>
@@ -19,6 +19,16 @@ public sealed class ResourcePolicyTests
     {
         Assert.Equal(JobWaitReason.None, ResourcePolicy.Evaluate(JobResourceClass.Light, Battery, ProcessingMode.BatterySaver));
         Assert.Equal(JobWaitReason.None, ResourcePolicy.Evaluate(JobResourceClass.Light, Ac with { RecordingActive = true }, ProcessingMode.Auto));
+    }
+
+    [Fact]
+    public void Auto_keeps_working_on_battery_until_it_runs_low()
+    {
+        Assert.Equal(JobWaitReason.None, ResourcePolicy.Evaluate(JobResourceClass.Heavy, Battery with { BatteryPercent = 43 }, ProcessingMode.Auto));
+        Assert.Equal(JobWaitReason.LowBattery,
+            ResourcePolicy.Evaluate(JobResourceClass.Heavy, Battery with { BatteryPercent = ResourcePolicy.AutoBatteryMinPercent - 1 }, ProcessingMode.Auto));
+        Assert.Equal(JobWaitReason.EnergySaver, ResourcePolicy.Evaluate(JobResourceClass.Heavy, Battery with { EnergySaverOn = true }, ProcessingMode.Auto));
+        Assert.True(ResourcePolicy.Budget(Battery, ProcessingMode.Auto, 12).PreferEfficiency);
     }
 
     [Fact]

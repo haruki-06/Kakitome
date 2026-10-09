@@ -133,8 +133,8 @@ STRINGS = [
     ("Wait_Dependency", "Waiting for the previous step", "前の工程を待っています"),
     ("Wait_RetryBackoff", "Will retry shortly", "しばらくしてから再試行します"),
     ("Wait_OnBattery", "Waiting for AC power to save battery", "バッテリー節約のため電源接続を待っています"),
-    ("Wait_EnergySaver", "Waiting while Energy Saver is on", "省電力モードのため待機しています"),
-    ("Wait_LowBattery", "Waiting: battery is low", "バッテリー残量が少ないため待機しています"),
+    ("Wait_EnergySaver", "Waiting while Windows Energy Saver is on", "Windows の省電力モードがオンのため待機しています"),
+    ("Wait_LowBattery", "Waiting: battery is low. Processing continues on AC power.", "バッテリー残量が少ないため待機しています。電源につなぐと再開します。"),
     ("Wait_SystemBusy", "Waiting until the PC is less busy", "PC の負荷が下がるのを待っています"),
     ("Wait_LowMemory", "Waiting for free memory", "空きメモリが増えるのを待っています"),
     ("Wait_LowDiskSpace", "Paused: the disk is almost full", "ディスクの空きが少ないため停止しています"),
@@ -356,7 +356,7 @@ STRINGS = [
     ("Settings_About.Text", "About", "このアプリについて"),
     ("Settings_Releases.Content", "Releases on GitHub", "GitHub のリリースページ"),
     ("Settings_Privacy.Text", "Recordings, transcripts and summaries stay on this PC. Kakitome uses no cloud service. It contacts the internet only to download models and tools and, when turned on, to check GitHub for a newer version (only the version is asked for).", "録音・文字起こし・要約はこの PC の中だけで扱います。クラウドサービスは使用しません。インターネットに接続するのは、モデルやツールのダウンロードと、オンのときの新しいバージョンの確認（GitHub にバージョンを問い合わせるだけ）のみです。"),
-    ("Mode_Auto", "Automatic (heavy work on AC power)", "自動（重い処理は電源接続時）"),
+    ("Mode_Auto", "Automatic (on battery: slower, pauses below 30 %)", "自動（バッテリー時は控えめに処理、残り 30% 未満で一時停止）"),
     ("Mode_AlwaysProcess", "Always (also on battery)", "常に処理（バッテリー時も）"),
     ("Mode_BatterySaver", "Battery first (only on AC with a charged battery)", "バッテリー優先（十分充電された電源接続時のみ）"),
     ("Language_Auto", "Detect automatically", "自動判定"),
@@ -468,6 +468,7 @@ STRINGS = [
     ('Diagnostics_OpenLogs.Content', 'Open log folder', 'ログフォルダーを開く'),
     ('Diagnostics_Saved', 'Diagnostics saved. Attach the zip to the issue.', '診断情報を保存しました。zip を Issue に添付してください。'),
     ('Diagnostics_Failed', 'Diagnostics could not be saved: {0}', '診断情報を保存できませんでした：{0}'),
+    ('Home_ProcessingWaiting', '{0} waiting — {1}', '{0} 件の処理が待機中：{1}'),
 ]
 
 HEADER = """<?xml version="1.0" encoding="utf-8"?>

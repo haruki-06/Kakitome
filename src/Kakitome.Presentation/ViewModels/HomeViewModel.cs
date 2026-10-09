@@ -109,6 +109,10 @@ public sealed partial class HomeViewModel : ObservableObject
         var recent = (await _library.ListRecordingsAsync().ConfigureAwait(false)).Take(5).ToList();
         var jobs = await _jobs.ListAsync().ConfigureAwait(false);
         var active = jobs.Count(j => !j.IsTerminal);
+        // Nothing running and work held back by power: say why, so it does not look stuck.
+        var held = jobs.Any(j => j.State == JobState.Running) ? JobWaitReason.None
+            : jobs.Where(j => j.State == JobState.Pending).Select(j => j.WaitReason)
+                .FirstOrDefault(r => r is JobWaitReason.OnBattery or JobWaitReason.LowBattery or JobWaitReason.EnergySaver);
         var needsModel = !ModelCatalog.All.Any(m => _models.GetState(m.Id) == ModelState.Installed);
         var downloading = ModelCatalog.All.FirstOrDefault(m => jobs.Any(j =>
             j.Kind == ModelInstallJobHandler.JobKind && !j.IsTerminal && j.Payload == ModelInstallJobHandler.PayloadFor(m.Id)));
@@ -131,7 +135,9 @@ public sealed partial class HomeViewModel : ObservableObject
             NeedsModelText = downloading is null
                 ? _text.GetString("Home_NeedsModelText")
                 : _text.Format("Home_ModelDownloading", downloading.DisplayName);
-            ProcessingText = active == 0 ? _text.GetString("Queue_AllDone") : _text.Format("Queue_ActiveCount", active);
+            ProcessingText = active == 0 ? _text.GetString("Queue_AllDone")
+                : held != JobWaitReason.None ? _text.Format("Home_ProcessingWaiting", active, _text.GetString($"Wait_{held}"))
+                : _text.Format("Queue_ActiveCount", active);
         });
     }
 

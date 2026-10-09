@@ -1,3 +1,4 @@
+using Kakitome.Application.Jobs;
 ﻿using System.Runtime.InteropServices;
 using NAudio.Wave;
 using Kakitome.Application.Audio;
@@ -82,6 +83,69 @@ public sealed class PipelineTests
         await JobSchedulerTests.RunUntilSettledAsync(f);
         await WaitUntilAsync(async () => (await f.Library.GetMetadataAsync(entry.Id)).Audio[0].Analysis is not null);
         Assert.True((await f.Library.GetMetadataAsync(entry.Id)).Audio[0].Analysis!.Silent);
+    }
+
+    [Fact]
+    public async Task Startup_completes_a_pipeline_that_was_cut_short_while_being_queued_but_not_failed_steps()
+    {
+        await using var f = await LibraryFixture.CreateAsync();
+        var cut = await CompletedRecordingAsync(f);
+        var failed = await CompletedRecordingAsync(f);
+        string[] stages = [.. ProcessingPipeline.StageOrder.Where(f.Scheduler.HasHandler)];
+
+        // As in the field test: every step marked pending, then the app ended after the first stage's job was created
+        // (that job later succeeded); the other recording's transcription failed.
+        foreach (var (id, asrState) in new[] { (cut, (JobState?)null), (failed, JobState.Failed) })
+        {
+            await f.Library.UpdateMetadataAsync(id, m => m.Processing = [.. stages.Select(s => new ProcessingStepInfo
+            {
+                Stage = s,
+                Status = s == stages[0] ? ProcessingStepStatus.Succeeded : s == "asr" && asrState is not null ? ProcessingStepStatus.Failed : ProcessingStepStatus.Pending,
+            })]);
+            await f.Jobs.AddAsync(Job(id, stages[0], JobState.Succeeded));
+            if (asrState is { } state)
+            {
+                await f.Jobs.AddAsync(Job(id, "asr", state));
+            }
+        }
+
+        Assert.Equal(1, await f.Pipeline.EnsureQueuedAsync());
+
+        var queued = (await f.Jobs.ListActiveAsync()).Where(j => j.RecordingId == cut).OrderBy(j => j.CreatedAt).ToList();
+        Assert.Equal(stages[1..], queued.Select(j => j.Kind));
+        Assert.Null(queued[0].DependsOn); // the analysis before it is done
+        Assert.DoesNotContain(await f.Jobs.ListActiveAsync(), j => j.RecordingId == failed);
+        Assert.Equal(0, await f.Pipeline.EnsureQueuedAsync()); // already queued
+
+        static JobRecord Job(Kakitome.Domain.Recordings.RecordingId id, string kind, JobState state) => new()
+        {
+            Id = Guid.NewGuid(),
+            Kind = kind,
+            RecordingId = id,
+            State = state,
+            CreatedAt = DateTimeOffset.UtcNow,
+            UpdatedAt = DateTimeOffset.UtcNow,
+            FinishedAt = DateTimeOffset.UtcNow,
+        };
+    }
+
+    private static async Task<Kakitome.Domain.Recordings.RecordingId> CompletedRecordingAsync(LibraryFixture f)
+    {
+        var entry = await f.Library.CreateRecordingAsync(new NewRecording { Project = "P" });
+        var folder = await f.Library.GetRecordingPathAsync(entry.Id);
+        using (var writer = new WavFileWriter(Path.Combine(folder, "audio.wav"), AudioFormat.Microphone))
+        {
+            writer.Write(new byte[48_000 * 4]);
+            writer.Complete();
+        }
+
+        await f.Library.UpdateMetadataAsync(entry.Id, m =>
+        {
+            m.Capture!.Status = CaptureStatus.Completed;
+            m.Audio = [new AudioStreamInfo { FileName = "audio.wav", Role = AudioStreamRole.Microphone }];
+        });
+        await f.Library.SynchronizeAsync();
+        return entry.Id;
     }
 
     [Fact]

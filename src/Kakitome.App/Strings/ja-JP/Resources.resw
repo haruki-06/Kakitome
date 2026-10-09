@@ -146,8 +146,8 @@
   <data name="Wait_Dependency" xml:space="preserve"><value>前の工程を待っています</value></data>
   <data name="Wait_RetryBackoff" xml:space="preserve"><value>しばらくしてから再試行します</value></data>
   <data name="Wait_OnBattery" xml:space="preserve"><value>バッテリー節約のため電源接続を待っています</value></data>
-  <data name="Wait_EnergySaver" xml:space="preserve"><value>省電力モードのため待機しています</value></data>
-  <data name="Wait_LowBattery" xml:space="preserve"><value>バッテリー残量が少ないため待機しています</value></data>
+  <data name="Wait_EnergySaver" xml:space="preserve"><value>Windows の省電力モードがオンのため待機しています</value></data>
+  <data name="Wait_LowBattery" xml:space="preserve"><value>バッテリー残量が少ないため待機しています。電源につなぐと再開します。</value></data>
   <data name="Wait_SystemBusy" xml:space="preserve"><value>PC の負荷が下がるのを待っています</value></data>
   <data name="Wait_LowMemory" xml:space="preserve"><value>空きメモリが増えるのを待っています</value></data>
   <data name="Wait_LowDiskSpace" xml:space="preserve"><value>ディスクの空きが少ないため停止しています</value></data>
@@ -381,7 +381,7 @@
   <data name="Settings_About.Text" xml:space="preserve"><value>このアプリについて</value></data>
   <data name="Settings_Releases.Content" xml:space="preserve"><value>GitHub のリリースページ</value></data>
   <data name="Settings_Privacy.Text" xml:space="preserve"><value>録音・文字起こし・要約はこの PC の中だけで扱います。クラウドサービスは使用しません。インターネットに接続するのは、モデルやツールのダウンロードと、オンのときの新しいバージョンの確認（GitHub にバージョンを問い合わせるだけ）のみです。</value></data>
-  <data name="Mode_Auto" xml:space="preserve"><value>自動（重い処理は電源接続時）</value></data>
+  <data name="Mode_Auto" xml:space="preserve"><value>自動（バッテリー時は控えめに処理、残り 30% 未満で一時停止）</value></data>
   <data name="Mode_AlwaysProcess" xml:space="preserve"><value>常に処理（バッテリー時も）</value></data>
   <data name="Mode_BatterySaver" xml:space="preserve"><value>バッテリー優先（十分充電された電源接続時のみ）</value></data>
   <data name="Language_Auto" xml:space="preserve"><value>自動判定</value></data>
@@ -492,4 +492,5 @@
   <data name="Diagnostics_OpenLogs.Content" xml:space="preserve"><value>ログフォルダーを開く</value></data>
   <data name="Diagnostics_Saved" xml:space="preserve"><value>診断情報を保存しました。zip を Issue に添付してください。</value></data>
   <data name="Diagnostics_Failed" xml:space="preserve"><value>診断情報を保存できませんでした：{0}</value></data>
+  <data name="Home_ProcessingWaiting" xml:space="preserve"><value>{0} 件の処理が待機中：{1}</value></data>
 </root>

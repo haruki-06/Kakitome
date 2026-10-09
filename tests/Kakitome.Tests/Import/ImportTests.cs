@@ -158,6 +158,7 @@ public sealed class ImportTests
     [InlineData("ERROR: Unsupported URL: https://example.com/", true)]
     [InlineData("ERROR: [youtube] abc: Private video. Sign in if you've been granted access", true)]
     [InlineData("ERROR: unable to download video data: HTTP Error 503: Service Unavailable", false)]
+    [InlineData("ERROR: unable to download video data: HTTP Error 403: Forbidden", false)] // transient on YouTube
     [InlineData("ERROR: Unable to download webpage: <urlopen error [Errno 11001] getaddrinfo failed>", false)]
     public void YtDlp_errors_are_classified(string error, bool permanent) => Assert.Equal(permanent, YtDlpDownloader.IsPermanentError(error));
 

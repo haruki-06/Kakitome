@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="NAudio.Wasapi" />
+    <PackageReference Include="System.Diagnostics.EventLog" />
     <PackageReference Include="Whisper.net" />
     <PackageReference Include="LLamaSharp" />
     <PackageReference Include="LLamaSharp.Backend.Cpu" />

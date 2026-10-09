@@ -550,3 +550,18 @@ Extends (does not change) the canonical Library contract in `docs/05`:
   jobs.txt (last 300 steps with errors), settings.json — never audio, transcripts, summaries or titles; project and
   file names can appear in log lines (said in the UI). GitHub issue template and `docs/testing/field-test.md` ask for
   that zip.
+
+## ADR-042 — Auto mode keeps processing on a charged battery (field test, 2026-10-09)
+
+- Context: a friend's laptop test (Ryzen 5 7530U, CPU only, on battery at 43 %) reported that nothing progressed on
+  battery. Auto deferred every heavy job from the first percent on battery, so a laptop used unplugged never got a
+  transcript. docs/06 asks Auto to "defer/reduce heavy background work on battery".
+- Decision: Auto reduces instead of deferring while the battery has at least 30 % (`AutoBatteryMinPercent`) and
+  Windows Energy Saver is off — the existing efficient budget (a quarter of the cores, no GPU offload) applies — and
+  waits for AC below that (preempting a running job). "Battery first" keeps the old behavior; "Always" is unchanged.
+  Home says why work is held back ("n waiting — battery is low…").
+- Same field test: (1) the app ended natively right after a URL import while the pipeline was being queued, leaving
+  only the first stage queued; startup catch-up now queues the remaining steps that are still "pending" in
+  metadata.json with no job (failed/cancelled steps are left alone). (2) Diagnostics now include Windows' own crash and
+  hang records for Kakitome.exe (Application Error 1000, Application Hang 1002, .NET Runtime 1026, WER 1001), which name
+  the faulting module of a native crash. (3) yt-dlp "HTTP Error 403" is retried as transient (YouTube media requests).

@@ -19,6 +19,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<Kakitome.Application.Updates.IReleaseFeed>(_ => new Kakitome.Infrastructure.Updates.GitHubReleaseFeed());
         services.AddSingleton<Kakitome.Application.Diagnostics.IDiagnosticsSource, Diagnostics.HardwareDiagnostics>();
         services.AddSingleton<Kakitome.Application.Diagnostics.IDiagnosticsSource, Diagnostics.AudioDiagnostics>();
+        services.AddSingleton<Kakitome.Application.Diagnostics.IDiagnosticsSource, Diagnostics.WindowsErrorReports>();
         services.AddSingleton<IAudioDeviceCatalog, WasapiDeviceCatalog>();
         services.AddSingleton<IAudioCaptureFactory, WasapiCaptureFactory>();
         services.AddSingleton<IKeepAwake, WindowsKeepAwake>();

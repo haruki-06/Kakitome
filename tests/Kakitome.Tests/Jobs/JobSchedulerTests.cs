@@ -1,4 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Kakitome.Application.Jobs;
 using Kakitome.Tests.TestSupport;
 
@@ -167,17 +167,21 @@ public sealed class JobSchedulerTests
     }
 
     [Fact]
-    public async Task Heavy_work_waits_for_AC_power_in_auto_mode()
+    public async Task Heavy_work_runs_on_a_charged_battery_and_waits_for_AC_when_low_in_auto_mode()
     {
         var heavy = new ScriptedHandler("t.heavy", JobResourceClass.Heavy, (_, _) => Task.CompletedTask);
         await using var f = await CreateAsync(heavy);
-        f.SystemResources.Update(r => r with { OnAcPower = false });
-        var job = await f.Scheduler.EnqueueAsync(new JobRequest("t.heavy"));
+        f.SystemResources.Update(r => r with { OnAcPower = false, BatteryPercent = 60 });
+        var first = await f.Scheduler.EnqueueAsync(new JobRequest("t.heavy"));
+        await RunUntilSettledAsync(f);
+        Assert.Equal(JobState.Succeeded, (await f.Jobs.GetAsync(first.Id))!.State);
 
+        f.SystemResources.Update(r => r with { BatteryPercent = ResourcePolicy.AutoBatteryMinPercent - 1 });
+        var job = await f.Scheduler.EnqueueAsync(new JobRequest("t.heavy"));
         await RunUntilSettledAsync(f);
         var waiting = (await f.Jobs.GetAsync(job.Id))!;
         Assert.Equal(JobState.Pending, waiting.State);
-        Assert.Equal(JobWaitReason.OnBattery, waiting.WaitReason);
+        Assert.Equal(JobWaitReason.LowBattery, waiting.WaitReason);
 
         f.SystemResources.Update(r => r with { OnAcPower = true });
         await RunUntilSettledAsync(f);
@@ -199,7 +203,7 @@ public sealed class JobSchedulerTests
     }
 
     [Fact]
-    public async Task Unplugging_power_preempts_a_running_heavy_job_without_counting_an_attempt()
+    public async Task Running_low_on_battery_preempts_a_running_heavy_job_without_counting_an_attempt()
     {
         var gate = new TaskCompletionSource();
         var runs = 0;
@@ -217,12 +221,12 @@ public sealed class JobSchedulerTests
         await WaitForStateAsync(f, job.Id, JobState.Running);
         await WaitUntilAsync(() => f.Jobs.GetAsync(job.Id).Result!.Checkpoint == "50%");
 
-        f.SystemResources.Update(r => r with { OnAcPower = false });
+        f.SystemResources.Update(r => r with { OnAcPower = false, BatteryPercent = ResourcePolicy.AutoBatteryMinPercent - 1 });
         await RunUntilSettledAsync(f);
 
         var deferred = (await f.Jobs.GetAsync(job.Id))!;
         Assert.Equal(JobState.Pending, deferred.State);
-        Assert.Equal(JobWaitReason.OnBattery, deferred.WaitReason);
+        Assert.Equal(JobWaitReason.LowBattery, deferred.WaitReason);
         Assert.Equal(0, deferred.Attempts);
         Assert.Equal("50%", deferred.Checkpoint);
 

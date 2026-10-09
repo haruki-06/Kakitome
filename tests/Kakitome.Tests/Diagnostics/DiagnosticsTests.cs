@@ -90,5 +90,10 @@ public sealed class DiagnosticsTests
         using var catalog = new Kakitome.Infrastructure.Audio.WasapiDeviceCatalog();
         var audio = new Kakitome.Infrastructure.Diagnostics.AudioDiagnostics(catalog).Describe().ToList();
         Assert.Contains(audio, l => l.StartsWith("Per-app capture supported: ", StringComparison.Ordinal));
+
+        var crashes = new Kakitome.Infrastructure.Diagnostics.WindowsErrorReports().Describe().ToList();
+        Assert.NotEmpty(crashes); // "none", or entries that start with "--- <time> <provider> <id>"
+        Assert.All(crashes.Where(l => !l.StartsWith("  ", StringComparison.Ordinal)), l => Assert.True(l == "none" || l.StartsWith("--- ", StringComparison.Ordinal), l));
+        File.WriteAllLines(Path.Combine(Path.GetTempPath(), "kakitome-wer-sample.txt"), crashes);
     }
 }
