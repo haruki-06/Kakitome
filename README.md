@@ -160,6 +160,10 @@ UI の画面操作テスト（UI Automation）は `tools/Test-*.ps1` にあり�
 
 - インストーラーへのコード署名（OSS 向けの無料署名サービスの利用を検討中）。署名がないため、初回に SmartScreen の確認が表示されます。
 
+## 開発の支援
+
+Kakitome は無料で使えます。開発を応援していただける場合は、[GitHub Sponsors](https://github.com/sponsors/haruki-06) からご支援いただけると励みになります。
+
 ## ライセンス
 
 [MIT License](LICENSE)。同梱・利用しているサードパーティー製品のライセンスは `THIRD-PARTY-NOTICES.md` と `licenses/` にあります。
